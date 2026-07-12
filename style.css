@@ -1,0 +1,183 @@
+:root {
+    --cw-bg: #F9F7F4;
+    --cw-main: #3A3733;
+    --cw-sub: #A8A39C;
+    --cw-border: #D6D0C8;
+    --cw-accent: #8E9BA7;
+}
+
+/* 深色模式变量 */
+.cw-dark-theme {
+    --cw-bg: #2C2A28;
+    --cw-main: #E8E4DF;
+    --cw-sub: #8E8A85;
+    --cw-border: #4A4744;
+    --cw-accent: #6c7a89;
+}
+
+.cw-floating-ui {
+    position: fixed; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--cw-bg); color: var(--cw-main);
+    display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: grab;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999;
+    transition: transform 0.2s, box-shadow 0.2s, background 0.3s, color 0.3s; 
+    border: 1px solid var(--cw-border); user-select: none;
+    touch-action: none; /* 核心修复：防止手机端拖拽时触发页面滚动 */
+}
+.cw-floating-ui:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+.cw-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.4); backdrop-filter: blur(3px); z-index: 9000;
+    display: flex; align-items: center; justify-content: center;
+}
+
+.cw-config-panel {
+    width: 90%; max-width: 600px; max-height: 85vh; /* 响应式宽度 */
+    background-color: var(--cw-bg); border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04); padding: 30px;
+    font-family: "Palatino Linotype", "Book Antiqua", "SimSun", "Songti SC", serif;
+    display: flex; flex-direction: column; overflow: hidden; position: relative;
+    transition: background-color 0.3s, color 0.3s;
+    box-sizing: border-box;
+}
+
+.cw-config-content {
+    margin-top: 20px; overflow-y: auto; flex: 1; padding-right: 5px;
+}
+
+.cw-form-group { margin-bottom: 15px; color: var(--cw-main); }
+.cw-form-group label { display: block; margin-bottom: 5px; font-size: 0.9em; color: var(--cw-sub); }
+.cw-input {
+    width: 100%; padding: 8px; border: 1px solid var(--cw-border); border-radius: 6px;
+    background: rgba(255,255,255,0.05); color: var(--cw-main); font-family: inherit; box-sizing: border-box;
+    transition: background 0.3s, border-color 0.3s, color 0.3s;
+}
+
+.cw-char-list { border-top: 1px solid var(--cw-border); margin-top: 20px; padding-top: 10px; }
+
+.cw-char-list-header {
+    cursor: pointer; padding: 10px; background: rgba(128,128,128,0.1);
+    border-radius: 6px; font-weight: bold; color: var(--cw-main);
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background 0.2s;
+}
+.cw-char-list-header:hover { background: rgba(128,128,128,0.2); }
+.cw-char-list-header span { font-size: 0.85em; font-weight: normal; color: var(--cw-sub); }
+.cw-char-list-header::after { content: '▼'; font-size: 0.8em; transition: transform 0.3s; color: var(--cw-sub); }
+.cw-char-list-header.open::after { transform: rotate(180deg); }
+
+.cw-char-list-content { display: none; margin-top: 10px; }
+.cw-char-tools { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.cw-search-input { flex: 1; padding: 6px; border: 1px solid var(--cw-border); border-radius: 4px; background: rgba(255,255,255,0.05); color: var(--cw-main); min-width: 120px; }
+.cw-tool-btn { cursor: pointer; padding: 6px 12px; border-radius: 4px; font-size: 0.85em; border: 1px solid var(--cw-border); background: transparent; color: var(--cw-main); white-space: nowrap; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+.cw-tool-btn:hover { background: rgba(128,128,128,0.2); }
+.cw-tool-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.cw-char-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 10px; border-bottom: 1px dashed rgba(128, 128, 128, 0.3); flex-wrap: wrap;
+}
+.cw-char-name { font-weight: bold; color: var(--cw-main); flex: 1; min-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cw-tag-input { flex: 1; padding: 4px 6px; border: 1px solid var(--cw-border); border-radius: 4px; background: rgba(255,255,255,0.05); color: var(--cw-main); font-size: 0.85em; min-width: 80px; cursor: pointer; text-align: center; }
+.cw-char-settings { display: flex; align-items: center; gap: 6px; justify-content: flex-end; flex-wrap: wrap; }
+.cw-time-input { width: 40px; text-align: center; border: 1px solid var(--cw-border); border-radius: 4px; background: transparent; color: var(--cw-main); padding: 2px; }
+
+.cw-btn-toggle {
+    cursor: pointer; padding: 4px 0; width: 44px; text-align: center;
+    border-radius: 4px; font-size: 0.8em; border: 1px solid var(--cw-border);
+    transition: 0.2s; background: transparent; color: var(--cw-main);
+}
+.cw-btn-toggle.blacklisted { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+
+.cw-close-btn {
+    position: absolute; top: 20px; right: 20px; font-size: 24px;
+    color: var(--cw-sub); cursor: pointer; transition: 0.3s; z-index: 10;
+}
+.cw-close-btn:hover { color: var(--cw-main); }
+
+.cw-setting-btn {
+    position: absolute; top: 24px; left: 20px; font-size: 20px;
+    color: var(--cw-sub); cursor: pointer; transition: 0.3s; z-index: 10;
+}
+.cw-setting-btn:hover { color: var(--cw-main); }
+
+.cw-theme-btn {
+    position: absolute; top: 24px; left: 55px; font-size: 20px;
+    color: var(--cw-sub); cursor: pointer; transition: 0.3s; z-index: 10;
+}
+.cw-theme-btn:hover { color: var(--cw-main); }
+
+#cw-popup-container {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    z-index: 9999999 !important; 
+    display: flex; flex-direction: column; gap: 15px;
+    pointer-events: none; align-items: center; width: 90%; max-width: 400px;
+}
+
+.cw-global-popup {
+    position: relative;
+    z-index: 9999999 !important; 
+    background: var(--cw-bg); color: var(--cw-main); padding: 15px 25px;
+    border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    font-family: "Palatino Linotype", "Book Antiqua", "SimSun", "Songti SC", serif;
+    display: flex; flex-direction: column; align-items: flex-start; text-align: left;
+    border: 1px solid var(--cw-border); width: 100%; box-sizing: border-box;
+    pointer-events: auto; cursor: pointer;
+    opacity: 0; transform: translateY(-20px); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.cw-global-popup.show { opacity: 1; transform: translateY(0); }
+.cw-global-popup-name { font-weight: bold; font-size: 1.1em; color: var(--cw-main); margin-bottom: 8px; border-bottom: 1px solid rgba(128,128,128,0.2); padding-bottom: 5px; width: 100%; }
+.cw-global-popup-text { font-size: 1.05em; line-height: 1.6; width: 100%; }
+
+.cw-prompt-modal {
+    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 90%; max-width: 800px; height: 80vh; background: var(--cw-bg); color: var(--cw-main);
+    z-index: 999999; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    display: flex; flex-direction: column; padding: 20px; box-sizing: border-box;
+    border: 1px solid var(--cw-border); font-family: inherit;
+    transition: background-color 0.3s, color 0.3s;
+}
+.cw-prompt-modal textarea { flex: 1; resize: none; margin-bottom: 15px; }
+
+.cw-api-preset-row { display: flex; gap: 5px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+
+.cw-tag-checkbox-label {
+    display: inline-block; padding: 6px 12px; border: 1px solid var(--cw-border);
+    border-radius: 20px; cursor: pointer; transition: 0.2s; user-select: none;
+    color: var(--cw-main); position: relative; font-size: 0.9em;
+}
+.cw-tag-checkbox-label.active { background: var(--cw-main); color: var(--cw-bg); }
+.cw-tag-checkbox-label input { display: none; }
+.cw-tag-delete { margin-left: 5px; cursor: pointer; opacity: 0.6; }
+.cw-tag-delete:hover { opacity: 1; color: #e74c3c; }
+
+.cw-add-char-item { transition: 0.2s; }
+.cw-add-char-item:hover { background: rgba(128,128,128,0.2); }
+
+.cw-model-item { transition: 0.2s; border: 1px solid var(--cw-border); border-radius: 4px; cursor: pointer; }
+.cw-model-item:hover { background: rgba(128,128,128,0.2); }
+
+.cw-toast {
+    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #e74c3c; color: white;
+    padding: 12px 24px; border-radius: 8px; z-index: 9999999; font-size: 14px; text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); pointer-events: none; width: 80%; max-width: 400px; box-sizing: border-box;
+    animation: cw-toast-fadein 0.3s forwards;
+}
+@keyframes cw-toast-fadein {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* ================== 手机端与小屏幕自适应 (Responsive) ================== */
+@media (max-width: 600px) {
+    .cw-config-panel { padding: 20px 15px; max-height: 90vh; }
+    .cw-api-preset-row select { width: 100%; flex: 1 1 100%; margin-bottom: 5px; }
+    .cw-form-group > div[style*="display:flex"] { flex-direction: column; align-items: stretch !important; gap: 5px; }
+    .cw-form-group > div[style*="display:flex"] i { align-self: flex-end; }
+    .cw-char-item { flex-direction: column; align-items: flex-start; }
+    .cw-char-settings { width: 100%; justify-content: flex-start; margin-top: 5px; }
+    .cw-setting-btn { top: 15px; left: 15px; }
+    .cw-theme-btn { top: 15px; left: 45px; }
+    .cw-close-btn { top: 12px; right: 15px; }
+}

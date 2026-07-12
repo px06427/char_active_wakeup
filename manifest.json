@@ -1,0 +1,12 @@
+{
+    "display_name": "Char Active Wakeup",
+    "name": "char_active_wakeup",
+    "loading_order": 1,
+    "js": "index.js",
+    "css": "style.css",
+    "author": "ganlu",
+    "version": "1.0.0",
+    "homePage": "https://github.com/px06427/char_active_wakeup",
+    "auto_update": true,
+    "minimum_client_version": "1.0.0"
+}
