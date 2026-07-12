@@ -38,7 +38,8 @@
 ### 方式一：通过 SillyTavern 扩展面板安装（推荐）
 
 1. 打开 SillyTavern，进入 **扩展（Extensions）** 面板。
-2. 在 **“Install from URL”** 输入框中粘贴本仓库地址。
+2. 在 **“Install from URL”** 输入框中粘贴
+ https://github.com/px06427/char_active_wakeup
 3. 点击 **Install**，等待下载完成。
 4. 刷新页面，点击侧边栏的扩展程序图标，找到 **“只给思念让路”**。
 
