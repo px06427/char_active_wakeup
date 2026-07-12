@@ -22,7 +22,7 @@
     box-shadow: 0 4px 15px rgba(0,0,0,0.15); z-index: 9999;
     transition: transform 0.2s, box-shadow 0.2s, background 0.3s, color 0.3s; 
     border: 1px solid var(--cw-border); user-select: none;
-    touch-action: none; /* 核心修复：防止手机端拖拽时触发页面滚动 */
+    touch-action: none; 
 }
 .cw-floating-ui:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
 
@@ -33,7 +33,7 @@
 }
 
 .cw-config-panel {
-    width: 90%; max-width: 600px; max-height: 85vh; /* 响应式宽度 */
+    width: 90%; max-width: 600px; max-height: 85vh; 
     background-color: var(--cw-bg); border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.04); padding: 30px;
     font-family: "Palatino Linotype", "Book Antiqua", "SimSun", "Songti SC", serif;
@@ -172,6 +172,10 @@
 /* ================== 手机端与小屏幕自适应 (Responsive) ================== */
 @media (max-width: 600px) {
     .cw-config-panel { padding: 20px 15px; max-height: 90vh; }
+    
+    /* 核心修复：全屏弹窗在小屏幕下的安全内边距与宽高 */
+    .cw-prompt-modal { width: 95vw; height: 90vh; padding: 15px; }
+    
     .cw-api-preset-row select { width: 100%; flex: 1 1 100%; margin-bottom: 5px; }
     .cw-form-group > div[style*="display:flex"] { flex-direction: column; align-items: stretch !important; gap: 5px; }
     .cw-form-group > div[style*="display:flex"] i { align-self: flex-end; }

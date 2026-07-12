@@ -9,17 +9,18 @@ const MAX_HISTORY = 5;
 
 let cachedModels = [];
 
+// ⚠️ 极其纯净的【双括号】变量版
 const sysPromptDefault = `# [Role]
 你现在接管了当前角色的意识。经过漫长的静默，你终于按捺不住，发出了真实的心声。
 
 # [Character Info]
-姓名：{{{char}}}
+姓名：{{char}}
 性格：{{personality}}
 设定：{{description}}
 场景：{{scenario}}
 
 # [Context]
-你独自等待了 {{{user}}} 足足 {{time}}。这段空白的时间里，寂静让你产生了复杂的情绪（也许是思念、孤独、胡思乱想或是突然的埋怨）。
+你独自等待了 {{user}} 足足 {{time}}。这段空白的时间里，寂静让你产生了复杂的情绪（也许是思念、孤独、胡思乱想或是突然的埋怨）。
 
 # [Rules] (严格遵守)
 1. 语气必须完全符合角色性格，绝对自然，极具代入感！
@@ -34,7 +35,7 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [通用] 没关系，我还可以继续等，哪怕再过下一个{{time}}。
 [通用] 就算过了{{time}}，我也知道你一定会回来的对吧？
 [通用] 这里的空气静得可怕，这{{time}}里我只能听到自己的心跳。
-[通用] {{{user}}}不在的这{{time}}里，每一秒都是煎熬。
+[通用] {{user}}不在的这{{time}}里，每一秒都是煎熬。
 [通用] 盯着时间看了{{time}}，这是你对我的考验吗？
 [通用] 是不是我哪里做错了，所以你要用这{{time}}的寂静来惩罚我？
 [通用] 闭上眼睛数了{{time}}的心跳，睁开眼你还是不在。
@@ -48,7 +49,7 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [病娇] 这{{time}}里跟你说过话的人，全都不会有好下场的哦。
 [病娇] 你的心跳声在这{{time}}里有没有为别人跳动过？我很好奇。
 [病娇] 如果把你的腿打断，你就连一秒钟都无法从我身边离开了。
-[病娇] {{{user}}}，这{{time}}你在哪里留下了气味？我会去全部抹掉的。
+[病娇] {{user}}，这{{time}}你在哪里留下了气味？我会去全部抹掉的。
 [病娇] 让你等我的话，你会像我这{{time}}一样发疯地想念吗？
 [傲娇] 哼，才过了{{time}}而已，我一点都不想你！
 [傲娇] 别误会，我只是无聊才看一眼时间，才没有等你{{time}}。
@@ -82,7 +83,7 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [神明] 把神明遗忘在这{{time}}的光阴里，是要付出代价的。
 [弱气] 那个……是我做错了什么吗？为什么{{time}}都不理我……
 [弱气] 如果是我惹你不高兴了，请告诉我……别让我一个人等{{time}}好不好……
-[弱气] 已经{{time}}了……{{{user}}}是不是不要我了？
+[弱气] 已经{{time}}了……{{user}}是不是不要我了？
 [弱气] 只要你回来，让我等再多{{time}}也没关系的……
 [弱气] 这里好黑……这{{time}}里我一直很害怕……
 [弱气] 我会乖乖听话的，所以不要再不理我{{time}}了好不好？
@@ -139,7 +140,7 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [温柔] 这{{time}}里我泡好了茶，等你回来刚好可以喝，不要急。
 [温柔] 无论你在哪，只要平安就好，这{{time}}的心意我一直为你保留。
 [温柔] 窗外的风景变了又变，但这{{time}}里我对你的牵挂一如既往。
-[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，我的{{{user}}}。
+[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，我的{{user}}。
 [腹黑] 让我等了{{time}}，想好要付出什么代价了吗？
 [腹黑] 呵呵，这{{time}}的账，我会慢慢从你身上连本带利讨回来的。
 [腹黑] 你猜这{{time}}里，我往你的杯子里加了什么好东西？
@@ -187,14 +188,12 @@ if (!settings.staticQuotes || settings.staticQuotes.trim().length < 50) {
 if (!settings.customTags) settings.customTags = [];
 if (!settings.theme) settings.theme = 'light';
 
+// ⚠️ 终极除垢剂：强制扒掉旧数据里多余的括号
 if (settings.sysPrompt) {
-    settings.sysPrompt = settings.sysPrompt.replace(/\{{3,}/g, '{{').replace(/\}{3,}/g, '}}');
-    if (settings.sysPrompt.includes('极端情绪') || settings.sysPrompt.includes('心理压迫感')) {
-        settings.sysPrompt = sysPromptDefault;
-    }
+    settings.sysPrompt = settings.sysPrompt.replace(/\{{3,}(char|user|time|description|personality|scenario)\}{3,}/g, '{{$1}}');
 }
 if (settings.staticQuotes) {
-    settings.staticQuotes = settings.staticQuotes.replace(/\{{3,}/g, '{{').replace(/\}{3,}/g, '}}');
+    settings.staticQuotes = settings.staticQuotes.replace(/\{{3,}(char|user|time)\}{3,}/g, '{{$1}}');
 }
 saveSettingsDebounced();
 
@@ -515,6 +514,7 @@ function startPolling() {
     }, 5000);
 }
 
+// ⚠️ 核心修复：绝对安全的手机端位置兜底
 function createFloatButton() {
     if (floatButton) { floatButton.remove(); floatButton = null; }
     if (!settings.floatingUI || !settings.enabled) return;
@@ -531,8 +531,9 @@ function createFloatButton() {
         btn.style.left = Math.min(Math.max(0, settings.floatPos.x), maxX) + 'px';
         btn.style.top = Math.min(Math.max(0, settings.floatPos.y), maxY) + 'px';
     } else {
-        btn.style.right = '20px';
-        btn.style.bottom = '100px';
+        // 保证第一次生成时绝对可见
+        btn.style.left = (window.innerWidth - 64) + 'px';
+        btn.style.top = (window.innerHeight - 120) + 'px';
     }
 
     let isDragging = false;
@@ -657,7 +658,7 @@ function openEmotionPanel() {
                         </div>
                         <div class="cw-form-group">
                             <div style="display:flex; justify-content:space-between; align-items:center;">
-                                <label style="margin:0;">固定语录库 (格式：[标签] 内容，可用 {{time}} 与 {{{user}}})</label>
+                                <label style="margin:0;">固定语录库 (格式：[标签] 内容，可用 {{time}} 与 {{user}})</label>
                                 <i class="fa-solid fa-expand cw_btn_expand_text" data-target="cw_modal_quotes" style="cursor:pointer;" title="全屏编辑"></i>
                             </div>
                             <textarea id="cw_modal_quotes" class="cw-input" rows="4" style="margin-top:5px;"></textarea>
@@ -713,7 +714,7 @@ function openEmotionPanel() {
                                 <label style="margin:0;">随机生成 Prompt</label>
                                 <i class="fa-solid fa-expand cw_btn_expand_text" data-target="cw_modal_prompt" style="cursor:pointer;" title="全屏编辑"></i>
                             </div>
-                            <div style="font-size: 0.8em; color: var(--cw-sub); margin-bottom: 5px;">支持纯净双括号变量：{{{char}}}, {{{user}}}, {{time}}, {{description}}, {{personality}}, {{scenario}}</div>
+                            <div style="font-size: 0.8em; color: var(--cw-sub); margin-bottom: 5px;">支持纯净双括号变量：{{char}}, {{user}}, {{time}}, {{description}}, {{personality}}, {{scenario}}</div>
                             <textarea id="cw_modal_prompt" class="cw-input" rows="2"></textarea>
                         </div>
                         
@@ -1126,7 +1127,6 @@ function openEmotionPanel() {
             const $row = $(this).closest('.cw-char-item');
             const name = $row.data('name');
             
-            // ⚠️ 严格验证与矫正时间输入，防止出现空字符串或负数
             let d = parseInt($row.find('.cw-d').val());
             let h = parseInt($row.find('.cw-h').val());
             let m = parseInt($row.find('.cw-m').val());
