@@ -9,7 +9,6 @@ const MAX_HISTORY = 5;
 
 let cachedModels = [];
 
-// ⚠️ 极其纯净的【双括号】变量版
 const sysPromptDefault = `# [Role]
 你现在接管了当前角色的意识。经过漫长的静默，你终于按捺不住，发出了真实的心声。
 
@@ -53,14 +52,14 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [病娇] 让你等我的话，你会像我这{{time}}一样发疯地想念吗？
 [傲娇] 哼，才过了{{time}}而已，我一点都不想你！
 [傲娇] 别误会，我只是无聊才看一眼时间，才没有等你{{time}}。
-[傲娇] 喂！{{time}}没回消息，你最好有一个完美的借口！
+[傲娇] 喂！都{{time}}没回消息了，你最好有一个完美的借口！
 [傲娇] 居然让我等了{{time}}，等下必须给我好好道歉听见没！
-[傲娇] 我才没有一直盯着门口看这{{time}}呢，笨蛋！
+[傲娇] 我才没有一直盯着表看时间呢！不就才{{time}}吗？我可没想你！
 [傲娇] 这{{time}}我可是过得很充实的，完全不需要你陪！
 [傲娇] 既然你{{time}}都不理我，那等下我也不理你了！
 [傲娇] 别以为过了{{time}}随便哄两句我就会原谅你！
 [傲娇] 我倒要看看，你还要多久才会意识到冷落了我{{time}}！
-[傲娇] 本小姐的时间可是很宝贵的，居然浪费了这{{time}}在你身上！
+[傲娇] 我的时间可是很宝贵的，居然浪费了{{time}}在想……骂你身上！
 [高冷] 过了{{time}}。你的效率一如既往的低下。
 [高冷] {{time}}毫无意义的等待。希望你下次出现时能带来有价值的消息。
 [高冷] 你的缺席已经持续了{{time}}。这并不在我的计划之内。
@@ -121,11 +120,11 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [阴暗] 这种距离感...呵呵，这{{time}}里你的恐惧是不是在慢慢发酵？
 [阴暗] 你身后的阴影已经跟了你{{time}}，你还要继续装作没看见吗？
 [阴暗] 乖孩子是不会让人等{{time}}的，你觉得惩罚应该从哪里开始？
-[活泼] 喂喂！已经{{time}}啦！快来陪我玩嘛！
+[活泼] 喂喂！已经过去{{time}}啦！快来陪我！
 [活泼] 就算过了{{time}}，我也很有精神哦！快出现啦！
 [活泼] 猜猜看这{{time}}我干了什么？快点回来听我讲嘛！
-[活泼] 别发呆啦！这{{time}}无聊死了，快带我去玩！
-[活泼] 滴滴滴！您的专属小可爱已经掉线{{time}}啦，需要亲亲才能重启！
+[活泼] 别发呆啦！这{{time}}无聊死了，快来和我一起玩！
+[活泼] 滴滴滴！您的专属小狗已经掉线{{time}}啦，需要亲亲才能重启哦！
 [活泼] 哇哦！原来你已经消失{{time}}了，我都快要在原地长蘑菇啦！
 [活泼] 快点快点！这{{time}}的探险我都等不及要跟你分享了！
 [活泼] 嘿嘿，如果你再不出现，这{{time}}的零食我就全部一个人吃掉啦！
@@ -140,7 +139,7 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [温柔] 这{{time}}里我泡好了茶，等你回来刚好可以喝，不要急。
 [温柔] 无论你在哪，只要平安就好，这{{time}}的心意我一直为你保留。
 [温柔] 窗外的风景变了又变，但这{{time}}里我对你的牵挂一如既往。
-[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，我的{{user}}。
+[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，{{user}}。
 [腹黑] 让我等了{{time}}，想好要付出什么代价了吗？
 [腹黑] 呵呵，这{{time}}的账，我会慢慢从你身上连本带利讨回来的。
 [腹黑] 你猜这{{time}}里，我往你的杯子里加了什么好东西？
@@ -188,12 +187,14 @@ if (!settings.staticQuotes || settings.staticQuotes.trim().length < 50) {
 if (!settings.customTags) settings.customTags = [];
 if (!settings.theme) settings.theme = 'light';
 
-// ⚠️ 终极除垢剂：强制扒掉旧数据里多余的括号
 if (settings.sysPrompt) {
-    settings.sysPrompt = settings.sysPrompt.replace(/\{{3,}(char|user|time|description|personality|scenario)\}{3,}/g, '{{$1}}');
+    settings.sysPrompt = settings.sysPrompt.replace(/\{{2,}(char|user|time|description|personality|scenario)\}{2,}/g, '{{$1}}');
+    if (settings.sysPrompt.includes('极端情绪') || settings.sysPrompt.includes('心理压迫感')) {
+        settings.sysPrompt = sysPromptDefault;
+    }
 }
 if (settings.staticQuotes) {
-    settings.staticQuotes = settings.staticQuotes.replace(/\{{3,}(char|user|time)\}{3,}/g, '{{$1}}');
+    settings.staticQuotes = settings.staticQuotes.replace(/\{{2,}(char|user|time)\}{2,}/g, '{{$1}}');
 }
 saveSettingsDebounced();
 
@@ -514,7 +515,6 @@ function startPolling() {
     }, 5000);
 }
 
-// ⚠️ 核心修复：绝对安全的手机端位置兜底
 function createFloatButton() {
     if (floatButton) { floatButton.remove(); floatButton = null; }
     if (!settings.floatingUI || !settings.enabled) return;
@@ -531,9 +531,9 @@ function createFloatButton() {
         btn.style.left = Math.min(Math.max(0, settings.floatPos.x), maxX) + 'px';
         btn.style.top = Math.min(Math.max(0, settings.floatPos.y), maxY) + 'px';
     } else {
-        // 保证第一次生成时绝对可见
-        btn.style.left = (window.innerWidth - 64) + 'px';
-        btn.style.top = (window.innerHeight - 120) + 'px';
+        // ⚠️ 保证初始安全加载位置，放弃之前的 window 内宽绝对计算，直接贴右下角
+        btn.style.right = '20px';
+        btn.style.bottom = '100px';
     }
 
     let isDragging = false;
