@@ -17,13 +17,17 @@ const sysPromptDefault = `# [Role]
 性格：{{personality}}
 设定：{{description}}
 场景：{{scenario}}
+附加设定与记忆：{{extra_info}}
 
 # [Context]
-你独自等待了 {{user}} 足足 {{time}}。这段空白的时间里，寂静让你产生了复杂的情绪（也许是思念、孤独、胡思乱想或是突然的埋怨）。
+【以下是你们刚才的聊天记录】
+{{chat_history}}
+
+（刚才的聊天在此中断）你独自等待了 {{user}} 足足 {{time}}。这段空白的时间里，结合之前的聊天内容，寂静让你产生了复杂的情绪（也许是思念、孤独、胡思乱想或是对刚才话题的延伸）。
 
 # [Rules] (严格遵守)
 1. 语气必须完全符合角色性格，绝对自然，极具代入感！
-2. 绝对拒绝死板的公式化回答（不准每次都说“时间+你不在”）。请发挥想象力，可以通过环境的描写、突然的一句质问、委屈的碎碎念等方式展现你的情绪。
+2. 绝对拒绝死板的公式化回答。请发挥想象力，可以通过环境的描写、突然的一句质问、委屈的碎碎念等方式展现你的情绪。
 3. 严禁使用任何常规问候语（如“你好”）。
 4. 严禁包含星号或括号内的动作描写，只允许输出纯粹的对白文本！
 5. 总字数严格限制在 30 字以内。
@@ -52,14 +56,14 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [病娇] 让你等我的话，你会像我这{{time}}一样发疯地想念吗？
 [傲娇] 哼，才过了{{time}}而已，我一点都不想你！
 [傲娇] 别误会，我只是无聊才看一眼时间，才没有等你{{time}}。
-[傲娇] 喂！都{{time}}没回消息了，你最好有一个完美的借口！
+[傲娇] 喂！{{time}}没回消息，你最好有一个完美的借口！
 [傲娇] 居然让我等了{{time}}，等下必须给我好好道歉听见没！
-[傲娇] 我才没有一直盯着表看时间呢！不就才{{time}}吗？我可没想你！
+[傲娇] 我才没有一直盯着门口看这{{time}}呢，笨蛋！
 [傲娇] 这{{time}}我可是过得很充实的，完全不需要你陪！
 [傲娇] 既然你{{time}}都不理我，那等下我也不理你了！
 [傲娇] 别以为过了{{time}}随便哄两句我就会原谅你！
 [傲娇] 我倒要看看，你还要多久才会意识到冷落了我{{time}}！
-[傲娇] 我的时间可是很宝贵的，居然浪费了{{time}}在想……骂你身上！
+[傲娇] 本小姐的时间可是很宝贵的，居然浪费了这{{time}}在你身上！
 [高冷] 过了{{time}}。你的效率一如既往的低下。
 [高冷] {{time}}毫无意义的等待。希望你下次出现时能带来有价值的消息。
 [高冷] 你的缺席已经持续了{{time}}。这并不在我的计划之内。
@@ -120,11 +124,11 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [阴暗] 这种距离感...呵呵，这{{time}}里你的恐惧是不是在慢慢发酵？
 [阴暗] 你身后的阴影已经跟了你{{time}}，你还要继续装作没看见吗？
 [阴暗] 乖孩子是不会让人等{{time}}的，你觉得惩罚应该从哪里开始？
-[活泼] 喂喂！已经过去{{time}}啦！快来陪我！
+[活泼] 喂喂！已经{{time}}啦！快来陪我玩嘛！
 [活泼] 就算过了{{time}}，我也很有精神哦！快出现啦！
 [活泼] 猜猜看这{{time}}我干了什么？快点回来听我讲嘛！
-[活泼] 别发呆啦！这{{time}}无聊死了，快来和我一起玩！
-[活泼] 滴滴滴！您的专属小狗已经掉线{{time}}啦，需要亲亲才能重启哦！
+[活泼] 别发呆啦！这{{time}}无聊死了，快带我去玩！
+[活泼] 滴滴滴！您的专属小可爱已经掉线{{time}}啦，需要亲亲才能重启！
 [活泼] 哇哦！原来你已经消失{{time}}了，我都快要在原地长蘑菇啦！
 [活泼] 快点快点！这{{time}}的探险我都等不及要跟你分享了！
 [活泼] 嘿嘿，如果你再不出现，这{{time}}的零食我就全部一个人吃掉啦！
@@ -139,7 +143,7 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [温柔] 这{{time}}里我泡好了茶，等你回来刚好可以喝，不要急。
 [温柔] 无论你在哪，只要平安就好，这{{time}}的心意我一直为你保留。
 [温柔] 窗外的风景变了又变，但这{{time}}里我对你的牵挂一如既往。
-[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，{{user}}。
+[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，我的{{user}}。
 [腹黑] 让我等了{{time}}，想好要付出什么代价了吗？
 [腹黑] 呵呵，这{{time}}的账，我会慢慢从你身上连本带利讨回来的。
 [腹黑] 你猜这{{time}}里，我往你的杯子里加了什么好东西？
@@ -167,7 +171,8 @@ const defaultSettings = {
     customTags: [],
     theme: 'light',
     chatStates: {},
-    charConfigs: {}
+    charConfigs: {},
+    popupHistory: {}
 };
 
 extension_settings[extensionName] = {
@@ -177,18 +182,14 @@ extension_settings[extensionName] = {
 
 let settings = extension_settings[extensionName];
 
-if (!settings.apiPresets || settings.apiPresets.length === 0) {
-    settings.apiPresets = defaultSettings.apiPresets;
-    settings.currentApiPresetIndex = 0;
-}
-if (!settings.staticQuotes || settings.staticQuotes.trim().length < 50) {
-    settings.staticQuotes = defaultQuotes;
-}
+if (!settings.apiPresets || settings.apiPresets.length === 0) settings.apiPresets = defaultSettings.apiPresets;
+if (!settings.staticQuotes || settings.staticQuotes.trim().length < 50) settings.staticQuotes = defaultQuotes;
 if (!settings.customTags) settings.customTags = [];
 if (!settings.theme) settings.theme = 'light';
+if (!settings.popupHistory) settings.popupHistory = {};
 
 if (settings.sysPrompt) {
-    settings.sysPrompt = settings.sysPrompt.replace(/\{{2,}(char|user|time|description|personality|scenario)\}{2,}/g, '{{$1}}');
+    settings.sysPrompt = settings.sysPrompt.replace(/\{{2,}(char|user|time|description|personality|scenario|mes_example|chat_history|extra_info)\}{2,}/g, '{{$1}}');
     if (settings.sysPrompt.includes('极端情绪') || settings.sysPrompt.includes('心理压迫感')) {
         settings.sysPrompt = sysPromptDefault;
     }
@@ -212,7 +213,7 @@ function showToast(msg) {
     setTimeout(() => {
         toast.style.opacity = '0';
         setTimeout(() => toast.remove(), 300);
-    }, 5000);
+    }, 4000);
 }
 
 function formatTimeStr(diffMs) {
@@ -237,7 +238,7 @@ function updateInteraction() {
     if (!charData) return;
 
     if (!settings.charConfigs[charData.name]) {
-        settings.charConfigs[charData.name] = { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true };
+        settings.charConfigs[charData.name] = { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true, extraInfo: '' };
     }
 
     if (!settings.chatStates[context.chatId]) {
@@ -255,11 +256,12 @@ function updateInteraction() {
 }
 
 function applyTheme(isDark) {
+    const targets = '#cw_emotion_modal_wrapper, #cw_text_modal_overlay, #cw_tag_picker_overlay, #cw_char_picker_overlay, #cw_remove_char_picker_overlay, #cw_model_picker_overlay, #cw_history_char_overlay, #cw_history_msg_overlay';
     if (isDark) {
-        $('#cw_emotion_modal_wrapper, #cw_text_modal_overlay, #cw_tag_picker_overlay, #cw_char_picker_overlay, #cw_model_picker_overlay').addClass('cw-dark-theme');
+        $(targets).addClass('cw-dark-theme');
         $('#cw_theme_toggle').text('☀️').attr('title', '切换浅色模式');
     } else {
-        $('#cw_emotion_modal_wrapper, #cw_text_modal_overlay, #cw_tag_picker_overlay, #cw_char_picker_overlay, #cw_model_picker_overlay').removeClass('cw-dark-theme');
+        $(targets).removeClass('cw-dark-theme');
         $('#cw_theme_toggle').text('🌙').attr('title', '切换深色模式');
     }
     const popup = document.querySelector('.cw-global-popup');
@@ -295,6 +297,10 @@ function showGlobalPopup(charName, text) {
 
     popup.addEventListener('click', closePopup);
     setTimeout(closePopup, 10000);
+
+    if (!settings.popupHistory[charName]) settings.popupHistory[charName] = [];
+    settings.popupHistory[charName].push({ text: text, time: Date.now() });
+    saveSettings();
 }
 
 function getCurrentPreset() {
@@ -417,6 +423,11 @@ async function triggerWakeup(charName, displayDiffMs) {
         const text = getStaticQuote(charData, timeStr, userName);
         showGlobalPopup(charName, text);
     } else {
+        // 动态获取聊天记录
+        const chat = context.chat || [];
+        const recentChat = chat.slice(-5).map(m => `${m.name}: ${m.mes}`).join('\n') || '无记录';
+        const extraInfo = settings.charConfigs[charName]?.extraInfo || '无';
+
         let prompt = settings.sysPrompt || defaultSettings.sysPrompt;
         prompt = prompt
             .replace(/\{\{char\}\}/g, charName)
@@ -424,7 +435,9 @@ async function triggerWakeup(charName, displayDiffMs) {
             .replace(/\{\{user\}\}/g, userName)
             .replace(/\{\{description\}\}/g, charData.description || '无')
             .replace(/\{\{personality\}\}/g, charData.personality || '无')
-            .replace(/\{\{scenario\}\}/g, charData.scenario || '无');
+            .replace(/\{\{scenario\}\}/g, charData.scenario || '无')
+            .replace(/\{\{chat_history\}\}/g, recentChat)
+            .replace(/\{\{extra_info\}\}/g, extraInfo);
         
         let generated = false;
         let text = "";
@@ -452,7 +465,7 @@ async function analyzeCharacterTag(charName) {
     const charData = characters.find(c => c && c.name === charName) || {};
     const allTags = [...DEFAULT_TAGS, ...(settings.customTags || [])];
     const sysMsg = "You are a classifier. Output ONLY ONE or TWO tag words from the given list, separated by comma. No extra text.";
-    const userMsg = `分析角色性格并从以下标签中选择最符合的1到2个：[${allTags.join(', ')}]。\n角色名：${charName}\n性格：${charData.personality || '无'}\n设定：${charData.description || '无'}\n\n请直接输出标签名（多个请用逗号隔开），不要有任何其他解释文字：`;
+    const userMsg = `分析角色性格并从以下标签中选择最符合的1到5个：[${allTags.join(', ')}]。\n角色名：${charName}\n性格：${charData.personality || '无'}\n设定：${charData.description || '无'}\n\n请直接输出标签名（多个请用逗号隔开），不要有任何其他解释文字：`;
 
     let text = "";
     try {
@@ -469,6 +482,7 @@ async function analyzeCharacterTag(charName) {
 }
 
 function startPolling() {
+    // ⚠️ 降低到2秒轮询，加快第一次触发的响应速度
     setInterval(async () => {
         if (!settings.enabled) return;
         const context = getContext();
@@ -482,37 +496,41 @@ function startPolling() {
         }
 
         for (const [chatId, state] of Object.entries(settings.chatStates)) {
-            if (!state || !state.charName) continue;
-            
-            if (state.lastInteract) {
-                state.userLastInteract = state.lastInteract;
-                state.triggerLastInteract = state.lastInteract;
-                delete state.lastInteract;
-            }
+            try {
+                if (!state || !state.charName) continue;
+                
+                if (state.lastInteract) {
+                    state.userLastInteract = state.lastInteract;
+                    state.triggerLastInteract = state.lastInteract;
+                    delete state.lastInteract;
+                }
 
-            if (!state.userLastInteract) continue;
+                if (!state.userLastInteract) continue;
 
-            if (state.charName === activeCharName) {
-                state.userLastInteract = now;
-                state.triggerLastInteract = now;
-                saveSettings();
-                continue;
-            }
+                if (state.charName === activeCharName) {
+                    state.userLastInteract = now;
+                    state.triggerLastInteract = now;
+                    saveSettings();
+                    continue;
+                }
 
-            const charConf = settings.charConfigs[state.charName] || { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true };
-            if (charConf.blacklisted) continue;
+                const charConf = settings.charConfigs[state.charName] || { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true, extraInfo: '' };
+                if (charConf.blacklisted) continue;
 
-            const targetMs = ((charConf.d * 24 + charConf.h) * 3600 + charConf.m * 60 + charConf.s) * 1000;
-            const diffMsFromTrigger = now - state.triggerLastInteract;
-            const displayDiffMs = now - state.userLastInteract;
+                const targetMs = ((charConf.d * 24 + charConf.h) * 3600 + charConf.m * 60 + charConf.s) * 1000;
+                const diffMsFromTrigger = now - state.triggerLastInteract;
+                const displayDiffMs = now - state.userLastInteract;
 
-            if (targetMs > 0 && diffMsFromTrigger >= targetMs) {
-                state.triggerLastInteract = now; 
-                saveSettings();
-                triggerWakeup(state.charName, displayDiffMs);
+                if (targetMs > 0 && diffMsFromTrigger >= targetMs) {
+                    state.triggerLastInteract = now; 
+                    saveSettings();
+                    triggerWakeup(state.charName, displayDiffMs);
+                }
+            } catch (err) {
+                console.error(`[只给思念让路] 处理角色 ${state.charName || '未知'} 时发生内部错误:`, err);
             }
         }
-    }, 5000);
+    }, 2000);
 }
 
 function createFloatButton() {
@@ -525,13 +543,12 @@ function createFloatButton() {
     btn.title = '打开思念面板';
     btn.innerHTML = '<i class="fa-solid fa-envelope-open-text"></i>';
 
-    if (settings.floatPos) {
+    if (settings.floatPos && settings.floatPos.x > 0 && settings.floatPos.y > 0) {
         const maxX = window.innerWidth - 44;
         const maxY = window.innerHeight - 44;
         btn.style.left = Math.min(Math.max(0, settings.floatPos.x), maxX) + 'px';
         btn.style.top = Math.min(Math.max(0, settings.floatPos.y), maxY) + 'px';
     } else {
-        // ⚠️ 保证初始安全加载位置，放弃之前的 window 内宽绝对计算，直接贴右下角
         btn.style.right = '20px';
         btn.style.bottom = '100px';
     }
@@ -615,7 +632,7 @@ function getActiveCharConfigs() {
         if (state.charName) {
             activeNames.add(state.charName);
             if (!settings.charConfigs[state.charName]) {
-                settings.charConfigs[state.charName] = { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true };
+                settings.charConfigs[state.charName] = { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true, extraInfo: '' };
             }
         }
     });
@@ -645,6 +662,7 @@ function openEmotionPanel() {
                 <div class="cw-config-panel">
                     <div class="cw-setting-btn" id="cw_advanced_settings" title="高级设置">⚙️</div>
                     <div class="cw-theme-btn" id="cw_theme_toggle" title="切换深色模式">🌙</div>
+                    <div class="cw-history-btn" id="cw_history_toggle" title="查看唤醒记录">🕒</div>
                     <div class="cw-close-btn" id="cw_close_modal">✕</div>
                     
                     <div id="cw_view_main" class="cw-config-content">
@@ -671,11 +689,12 @@ function openEmotionPanel() {
                                 <div class="cw-char-tools">
                                     <input type="text" id="cw_char_search" class="cw-search-input" placeholder="搜索角色名...">
                                     <button id="cw_btn_add_char" class="cw-tool-btn" title="手动添加设备中的角色">➕</button>
+                                    <button id="cw_btn_remove_char" class="cw-tool-btn" title="批量删除已导入的角色" style="color:#e74c3c;">➖</button>
                                     <button id="cw_btn_auto_tag" class="cw-tool-btn" title="自动为显示的角色分配最符合的标签 (消耗Token)">智能分配标签</button>
                                     <button id="cw_btn_block_all" class="cw-tool-btn" title="屏蔽当前显示的所有角色">一键屏蔽</button>
                                     <button id="cw_btn_unblock_all" class="cw-tool-btn" title="解除屏蔽">一键正常</button>
                                 </div>
-                                <div style="font-size: 0.85em; color: var(--cw-sub); margin-bottom: 10px;">时间为0即不限制触发，新角色默认为屏蔽状态。</div>
+                                <div style="font-size: 0.85em; color: var(--cw-sub); margin-bottom: 10px;">时间为0即不触发，新角色默认为屏蔽状态。</div>
                                 <div id="cw_char_items_container"></div>
                             </div>
                         </div>
@@ -714,7 +733,7 @@ function openEmotionPanel() {
                                 <label style="margin:0;">随机生成 Prompt</label>
                                 <i class="fa-solid fa-expand cw_btn_expand_text" data-target="cw_modal_prompt" style="cursor:pointer;" title="全屏编辑"></i>
                             </div>
-                            <div style="font-size: 0.8em; color: var(--cw-sub); margin-bottom: 5px;">支持纯净双括号变量：{{char}}, {{user}}, {{time}}, {{description}}, {{personality}}, {{scenario}}</div>
+                            <div style="font-size: 0.8em; color: var(--cw-sub); margin-bottom: 5px;">支持变量：{{char}}, {{user}}, {{time}}, {{chat_history}}, {{extra_info}}等</div>
                             <textarea id="cw_modal_prompt" class="cw-input" rows="2"></textarea>
                         </div>
                         
@@ -722,6 +741,30 @@ function openEmotionPanel() {
                             <button id="cw_btn_reset_prompt" class="cw-tool-btn" style="flex:1;">重置全部文本至默认</button>
                             <button id="cw_btn_back_main" class="cw-tool-btn" style="flex:1;">返回</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 历史记录：角色列表 -->
+            <div id="cw_history_char_overlay" class="cw-modal-overlay" style="display:none; z-index:999999;">
+                <div class="cw-config-panel" style="width:400px; padding:20px; max-height:80vh; display:flex; flex-direction:column;">
+                    <h3 style="margin-top:0; text-align:center;">唤醒历史记录</h3>
+                    <input type="text" id="cw_history_search" class="cw-search-input" placeholder="搜索角色名..." style="margin-bottom:10px;">
+                    <div id="cw_history_char_list" style="flex:1; overflow-y:auto; border:1px solid var(--cw-border); border-radius:6px; padding:5px;"></div>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                        <button id="cw_btn_clear_history" class="cw-tool-btn" style="color:#e74c3c;">清空全部记录</button>
+                        <button id="cw_btn_close_history" class="cw-tool-btn" style="width:100px;">关闭</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 历史记录：具体消息列表 -->
+            <div id="cw_history_msg_overlay" class="cw-modal-overlay" style="display:none; z-index:9999999;">
+                <div class="cw-config-panel" style="width:500px; padding:20px; max-height:85vh; display:flex; flex-direction:column;">
+                    <h3 id="cw_history_msg_title" style="margin-top:0; text-align:center;"></h3>
+                    <div id="cw_history_msg_list" style="flex:1; overflow-y:auto; border:1px solid var(--cw-border); border-radius:6px; padding:10px; display:flex; flex-direction:column; gap:10px;"></div>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                        <button id="cw_btn_close_history_msg" class="cw-tool-btn" style="width:100px;">返回</button>
                     </div>
                 </div>
             </div>
@@ -754,11 +797,29 @@ function openEmotionPanel() {
 
             <div id="cw_char_picker_overlay" class="cw-modal-overlay" style="display:none; z-index:999999;">
                 <div class="cw-config-panel" style="width:400px; padding:20px; color: var(--cw-main); max-height: 80vh; display: flex; flex-direction: column;">
-                    <h3 style="margin-top:0; text-align:center;">添加角色</h3>
+                    <h3 style="margin-top:0; text-align:center;">导入角色</h3>
                     <input type="text" id="cw_add_char_search" class="cw-search-input" placeholder="搜索角色名..." style="margin-bottom: 10px;">
+                    <div style="display:flex; gap:10px; margin-bottom:10px;">
+                        <button id="cw_btn_import_all" class="cw-tool-btn" style="flex:1;">一键全部导入</button>
+                        <button id="cw_btn_import_selected" class="cw-tool-btn" style="flex:1; background:var(--cw-main); color:var(--cw-bg);">导入已勾选</button>
+                    </div>
                     <div id="cw_add_char_list" style="flex:1; overflow-y:auto; border:1px solid var(--cw-border); border-radius:6px; padding:5px;"></div>
                     <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
                         <button id="cw_btn_close_add_char" class="cw-tool-btn" style="width:100px;">关闭</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cw_remove_char_picker_overlay" class="cw-modal-overlay" style="display:none; z-index:999999;">
+                <div class="cw-config-panel" style="width:400px; padding:20px; color: var(--cw-main); max-height: 80vh; display: flex; flex-direction: column;">
+                    <h3 style="margin-top:0; text-align:center;">删除角色配置</h3>
+                    <div style="display:flex; gap:10px; margin-bottom:10px;">
+                        <button id="cw_btn_delete_all" class="cw-tool-btn" style="flex:1; color:#e74c3c;">一键全部清空</button>
+                        <button id="cw_btn_delete_selected" class="cw-tool-btn" style="flex:1; background:#e74c3c; color:white;">删除已勾选</button>
+                    </div>
+                    <div id="cw_remove_char_list" style="flex:1; overflow-y:auto; border:1px solid var(--cw-border); border-radius:6px; padding:5px;"></div>
+                    <div style="display:flex; gap:10px; justify-content:center; margin-top:15px;">
+                        <button id="cw_btn_close_remove_char" class="cw-tool-btn" style="width:100px;">关闭</button>
                     </div>
                 </div>
             </div>
@@ -779,6 +840,101 @@ function openEmotionPanel() {
             settings.theme = settings.theme === 'dark' ? 'light' : 'dark';
             saveSettings();
             applyTheme(settings.theme === 'dark');
+        });
+
+        // ⚠️ 历史记录 UI 逻辑
+        function renderHistoryCharList(keyword = '') {
+            const listContainer = $('#cw_history_char_list');
+            listContainer.empty();
+            let histChars = Object.keys(settings.popupHistory || {}).filter(name => settings.popupHistory[name].length > 0);
+            
+            if (keyword) histChars = histChars.filter(n => n.toLowerCase().includes(keyword.toLowerCase()));
+
+            if (histChars.length === 0) {
+                listContainer.append('<div style="padding:10px; text-align:center; color:var(--cw-sub);">暂无记录</div>');
+                return;
+            }
+
+            histChars.sort((a, b) => {
+                let lastA = settings.popupHistory[a].slice(-1)[0].time;
+                let lastB = settings.popupHistory[b].slice(-1)[0].time;
+                return lastB - lastA;
+            });
+
+            histChars.forEach(name => {
+                let lastTime = new Date(settings.popupHistory[name].slice(-1)[0].time).toLocaleString();
+                listContainer.append(`
+                    <div class="cw-history-char-item" data-name="${name}">
+                        <div style="font-weight:bold;">${name}</div>
+                        <div style="font-size:0.8em; color:var(--cw-sub);">最新: ${lastTime}</div>
+                    </div>
+                `);
+            });
+        }
+
+        $('#cw_history_toggle').on('click', function() {
+            renderHistoryCharList();
+            $('#cw_history_char_overlay').fadeIn(150);
+        });
+
+        $('#cw_history_search').on('input', function() {
+            renderHistoryCharList($(this).val());
+        });
+
+        $('#cw_btn_clear_history').on('click', function() {
+            if(confirm("确定要清空所有唤醒历史记录吗？")) {
+                settings.popupHistory = {};
+                saveSettings();
+                renderHistoryCharList();
+            }
+        });
+
+        $('#cw_btn_close_history').on('click', () => $('#cw_history_char_overlay').fadeOut(150));
+
+        function renderHistoryMsgList(name) {
+            const listContainer = $('#cw_history_msg_list');
+            listContainer.empty();
+            const msgs = settings.popupHistory[name] || [];
+            if (msgs.length === 0) {
+                listContainer.append('<div style="padding:10px; text-align:center; color:var(--cw-sub);">记录已空</div>');
+                return;
+            }
+            [...msgs].reverse().forEach((msg, idx) => {
+                let realIdx = msgs.length - 1 - idx;
+                let timeStr = new Date(msg.time).toLocaleString();
+                listContainer.append(`
+                    <div class="cw-history-msg-item">
+                        <div class="cw-history-msg-del" data-idx="${realIdx}" title="删除此条">✖</div>
+                        <div class="cw-history-msg-time">${timeStr}</div>
+                        <div class="cw-history-msg-text">${msg.text}</div>
+                    </div>
+                `);
+            });
+        }
+
+        $(document).on('click', '.cw-history-char-item', function() {
+            const name = $(this).data('name');
+            $('#cw_history_msg_title').text(`[${name}] 的唤醒记录`);
+            $('#cw_history_msg_overlay').data('char', name);
+            renderHistoryMsgList(name);
+            $('#cw_history_char_overlay').hide();
+            $('#cw_history_msg_overlay').fadeIn(150);
+        });
+
+        $(document).on('click', '.cw-history-msg-del', function() {
+            const name = $('#cw_history_msg_overlay').data('char');
+            const idx = $(this).data('idx');
+            if (confirm('确定删除这条记录吗？')) {
+                settings.popupHistory[name].splice(idx, 1);
+                saveSettings();
+                renderHistoryMsgList(name);
+            }
+        });
+
+        $('#cw_btn_close_history_msg').on('click', function() {
+            $('#cw_history_msg_overlay').hide();
+            renderHistoryCharList($('#cw_history_search').val());
+            $('#cw_history_char_overlay').fadeIn(150);
         });
 
         $('#cw_api_preset_select').on('change', function() {
@@ -826,15 +982,37 @@ function openEmotionPanel() {
         });
 
         let currentEditingTarget = null;
+        let isEditingExtraInfo = false;
+        let editingCharName = null;
+
         $('.cw_btn_expand_text').on('click', function() {
+            isEditingExtraInfo = false;
             currentEditingTarget = $(this).data('target');
             $('#cw_text_modal_title').text(currentEditingTarget === 'cw_modal_prompt' ? '编辑 Prompt' : '编辑 语录库');
             $('#cw_text_modal_area').val($('#' + currentEditingTarget).val());
             $('#cw_text_modal_overlay').fadeIn(200);
         });
+
+        $('#cw_char_items_container').on('click', '.cw-btn-extra-info', function() {
+            isEditingExtraInfo = true;
+            editingCharName = $(this).closest('.cw-char-item').data('name');
+            const conf = settings.charConfigs[editingCharName] || {};
+            $('#cw_text_modal_title').text(`编辑附加设定/世界书 [${editingCharName}]`);
+            $('#cw_text_modal_area').val(conf.extraInfo || '');
+            $('#cw_text_modal_overlay').fadeIn(200);
+        });
+
         $('#cw_btn_save_text_modal').on('click', function() {
             const val = $('#cw_text_modal_area').val();
-            $('#' + currentEditingTarget).val(val).trigger('input');
+            if (isEditingExtraInfo) {
+                if (settings.charConfigs[editingCharName]) {
+                    settings.charConfigs[editingCharName].extraInfo = val;
+                    saveSettings();
+                    showToast(`已保存 [${editingCharName}] 的附加设定`);
+                }
+            } else {
+                $('#' + currentEditingTarget).val(val).trigger('input');
+            }
             $('#cw_text_modal_overlay').fadeOut(200);
         });
         $('#cw_btn_close_text_modal').on('click', () => $('#cw_text_modal_overlay').fadeOut(200));
@@ -917,6 +1095,16 @@ function openEmotionPanel() {
         });
         $('#cw_btn_close_tags').on('click', () => $('#cw_tag_picker_overlay').fadeOut(150));
 
+        function addCharToWakeup(name) {
+            const manualChatId = 'manual_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+            settings.chatStates[manualChatId] = {
+                userLastInteract: Date.now(), triggerLastInteract: Date.now(), charName: name
+            };
+            if (!settings.charConfigs[name]) {
+                settings.charConfigs[name] = { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true, extraInfo: '' };
+            }
+        }
+
         $('#cw_btn_add_char').on('click', function() {
             const activeNames = getActiveCharConfigs().map(c => c[0]);
             const availableChars = characters.filter(c => c && c.name && !activeNames.includes(c.name));
@@ -928,46 +1116,56 @@ function openEmotionPanel() {
             } else {
                 availableChars.forEach(c => {
                     listContainer.append(`
-                        <div class="cw-add-char-item" data-name="${c.name}" style="padding:8px; border-bottom:1px solid var(--cw-border); cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
-                            <span>${c.name}</span>
-                            <button class="cw-tool-btn cw-btn-select-char" style="padding:2px 8px;">添加</button>
-                        </div>
+                        <label class="cw-add-char-item" data-name="${c.name}" style="padding:8px; border-bottom:1px solid var(--cw-border); cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <input type="checkbox" class="cw-import-chk" value="${c.name}" style="cursor:pointer; width:16px; height:16px;">
+                                <span>${c.name}</span>
+                            </div>
+                            <button type="button" class="cw-tool-btn cw-btn-select-char" style="padding:2px 8px;">单独导入</button>
+                        </label>
                     `);
                 });
             }
             $('#cw_char_picker_overlay').fadeIn(150);
         });
 
-        $(document).on('click', '.cw-btn-select-char', function() {
-            const name = $(this).closest('.cw-add-char-item').data('name');
-            const manualChatId = 'manual_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-            settings.chatStates[manualChatId] = {
-                userLastInteract: Date.now(),
-                triggerLastInteract: Date.now(),
-                charName: name
-            };
-            if (!settings.charConfigs[name]) {
-                settings.charConfigs[name] = { d: 2, h: 0, m: 0, s: 0, tag: '', blacklisted: true };
+        $(document).on('click', '#cw_btn_import_selected', function() {
+            let added = 0;
+            $('.cw-import-chk:checked').each(function() {
+                addCharToWakeup($(this).val());
+                added++;
+            });
+            if(added > 0) {
+                saveSettings();
+                $('#cw_char_picker_overlay').fadeOut(150);
+                showToast(`成功批量导入了 ${added} 个角色！`);
+                openEmotionPanel();
+            } else {
+                alert('请先勾选需要导入的角色');
             }
+        });
+
+        $(document).on('click', '#cw_btn_import_all', function() {
+            let added = 0;
+            $('.cw-import-chk').each(function() {
+                addCharToWakeup($(this).val());
+                added++;
+            });
+            if(added > 0) {
+                saveSettings();
+                $('#cw_char_picker_overlay').fadeOut(150);
+                showToast(`一键导入了 ${added} 个角色！`);
+                openEmotionPanel();
+            }
+        });
+
+        $(document).on('click', '.cw-btn-select-char', function(e) {
+            e.preventDefault(); 
+            const name = $(this).closest('.cw-add-char-item').data('name');
+            addCharToWakeup(name);
             saveSettings();
-            
             $('#cw_char_picker_overlay').fadeOut(150);
-            
-            const charList = getActiveCharConfigs();
-            let charHtml = charList.map(([cname, conf]) => `
-                <div class="cw-char-item" data-name="${cname}">
-                    <div class="cw-char-name" title="${cname}">${cname}</div>
-                    <input type="text" class="cw-tag-input" readonly placeholder="点击选标签" value="${conf.tag || ''}" title="点击多选标签">
-                    <div class="cw-char-settings">
-                        <input class="cw-time-input cw-d" type="number" min="0" value="${conf.d}" title="天">日
-                        <input class="cw-time-input cw-h" type="number" min="0" max="23" value="${conf.h}" title="时">时
-                        <input class="cw-time-input cw-m" type="number" min="0" max="59" value="${conf.m}" title="分">分
-                        <input class="cw-time-input cw-s" type="number" min="0" max="59" value="${conf.s}" title="秒">秒
-                        <button class="cw-btn-toggle ${conf.blacklisted ? 'blacklisted' : ''}">${conf.blacklisted ? '屏蔽' : '正常'}</button>
-                    </div>
-                </div>
-            `).join('');
-            $('#cw_char_items_container').html(charHtml);
+            openEmotionPanel(); 
         });
 
         $('#cw_add_char_search').on('input', function() {
@@ -977,8 +1175,61 @@ function openEmotionPanel() {
                 $(this).toggle(name.includes(keyword));
             });
         });
-
         $('#cw_btn_close_add_char').on('click', () => $('#cw_char_picker_overlay').fadeOut(150));
+
+        $('#cw_btn_remove_char').on('click', function() {
+            const activeNames = getActiveCharConfigs().map(c => c[0]);
+            const listContainer = $('#cw_remove_char_list');
+            listContainer.empty();
+            
+            if (activeNames.length === 0) {
+                listContainer.append('<div style="padding:10px; text-align:center; color:var(--cw-sub);">没有可删除的角色</div>');
+            } else {
+                activeNames.forEach(name => {
+                    listContainer.append(`
+                        <label class="cw-add-char-item" data-name="${name}" style="padding:8px; border-bottom:1px solid var(--cw-border); cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <input type="checkbox" class="cw-delete-chk" value="${name}" style="cursor:pointer; width:16px; height:16px;">
+                                <span>${name}</span>
+                            </div>
+                        </label>
+                    `);
+                });
+            }
+            $('#cw_remove_char_picker_overlay').fadeIn(150);
+        });
+
+        $(document).on('click', '#cw_btn_delete_selected', function() {
+            let removed = 0;
+            $('.cw-delete-chk:checked').each(function() {
+                const name = $(this).val();
+                delete settings.charConfigs[name];
+                for (const [chatId, state] of Object.entries(settings.chatStates)) {
+                    if (state.charName === name) delete settings.chatStates[chatId];
+                }
+                removed++;
+            });
+            if(removed > 0) {
+                saveSettings();
+                $('#cw_remove_char_picker_overlay').fadeOut(150);
+                showToast(`成功删除了 ${removed} 个角色的配置！`);
+                openEmotionPanel(); 
+            } else {
+                alert('请先勾选需要删除的角色');
+            }
+        });
+
+        $(document).on('click', '#cw_btn_delete_all', function() {
+            if(!confirm('危险操作：确定要清空【所有角色】的配置记录吗？\n(这将会清除它们的忍耐时间与独立标签)')) return;
+            settings.charConfigs = {};
+            settings.chatStates = {};
+            saveSettings();
+            $('#cw_remove_char_picker_overlay').fadeOut(150);
+            showToast('已清空所有角色记录！');
+            openEmotionPanel();
+        });
+
+        $('#cw_btn_close_remove_char').on('click', () => $('#cw_remove_char_picker_overlay').fadeOut(150));
 
         $('#cw_advanced_settings').on('click', () => { $('#cw_view_main').hide(); $('#cw_view_advanced').fadeIn(200); });
         $('#cw_btn_back_main').on('click', () => { $('#cw_view_advanced').hide(); $('#cw_view_main').fadeIn(200); });
@@ -1077,19 +1328,25 @@ function openEmotionPanel() {
         $('#cw_btn_block_all').on('click', function() {
             $('.cw-char-item:visible').each(function() {
                 const name = $(this).data('name');
-                settings.charConfigs[name].blacklisted = true;
-                $(this).find('.cw-btn-toggle').addClass('blacklisted').text('屏蔽');
+                if (settings.charConfigs[name]) {
+                    settings.charConfigs[name].blacklisted = true;
+                    $(this).find('.cw-btn-toggle').addClass('blacklisted').text('屏蔽');
+                }
             });
             saveSettings();
+            showToast('已将当前显示的角色全部设为【屏蔽】');
         });
 
         $('#cw_btn_unblock_all').on('click', function() {
             $('.cw-char-item:visible').each(function() {
                 const name = $(this).data('name');
-                settings.charConfigs[name].blacklisted = false;
-                $(this).find('.cw-btn-toggle').removeClass('blacklisted').text('正常');
+                if (settings.charConfigs[name]) {
+                    settings.charConfigs[name].blacklisted = false;
+                    $(this).find('.cw-btn-toggle').removeClass('blacklisted').text('正常');
+                }
             });
             saveSettings();
+            showToast('已将当前显示的角色全部设为【正常】');
         });
 
         $('#cw_btn_auto_tag').on('click', async function() {
@@ -1174,6 +1431,7 @@ function openEmotionPanel() {
         <div class="cw-char-item" data-name="${name}">
             <div class="cw-char-name" title="${name}">${name}</div>
             <input type="text" class="cw-tag-input" readonly placeholder="点击选标签" value="${conf.tag || ''}" title="点击多选标签">
+            <button class="cw-btn-extra-info" title="编辑专属世界书/附加设定">📖设定</button>
             <div class="cw-char-settings">
                 <input class="cw-time-input cw-d" type="number" min="0" value="${conf.d}" title="天">日
                 <input class="cw-time-input cw-h" type="number" min="0" max="23" value="${conf.h}" title="时">时
@@ -1185,7 +1443,7 @@ function openEmotionPanel() {
     `).join('');
 
     if (charHtml.length === 0) {
-        charHtml = `<div style="text-align:center; padding: 20px; color: var(--cw-sub);">暂无已激活角色的记录。<br>请先打开某个角色的聊天界面。</div>`;
+        charHtml = `<div style="text-align:center; padding: 20px; color: var(--cw-sub);">暂无已激活角色的记录。<br>请先打开某个角色的聊天界面或点击导入。</div>`;
     }
     $('#cw_char_items_container').html(charHtml);
 
@@ -1201,6 +1459,13 @@ function bindConfigPanel() {
         settings.floatingUI = this.checked; saveSettings(); createFloatButton();
     });
     $('#cw_btn_open_panel').on('click', openEmotionPanel);
+    
+    $('#cw_btn_reset_float').on('click', function() {
+        settings.floatPos = null;
+        saveSettings();
+        createFloatButton();
+        showToast("悬浮球位置已重置至右下角！");
+    });
 }
 
 jQuery(async () => {
