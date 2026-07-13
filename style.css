@@ -100,15 +100,17 @@
 .cw-setting-btn:hover { color: var(--cw-main); }
 .cw-theme-btn { position: absolute; top: 24px; left: 55px; font-size: 20px; color: var(--cw-sub); cursor: pointer; transition: 0.3s; z-index: 10; }
 .cw-theme-btn:hover { color: var(--cw-main); }
-
 .cw-history-btn { position: absolute; top: 24px; left: 90px; font-size: 20px; color: var(--cw-sub); cursor: pointer; transition: 0.3s; z-index: 10; }
 .cw-history-btn:hover { color: var(--cw-main); }
 
-.cw-history-char-item { padding: 12px; border-bottom: 1px solid var(--cw-border); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; border-radius: 6px;}
+/* ⚠️ 核心修复：添加 !important 防止酒馆全局样式干扰字体颜色 */
+.cw-history-char-item { padding: 12px; border-bottom: 1px solid var(--cw-border); cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; border-radius: 6px; color: var(--cw-main) !important;}
 .cw-history-char-item:hover { background: rgba(128,128,128,0.1); }
+.cw-history-char-name { font-weight: bold; color: var(--cw-main) !important; font-size: 1.05em; }
+
 .cw-history-msg-item { position: relative; padding: 12px; border: 1px solid var(--cw-border); border-radius: 8px; background: rgba(128,128,128,0.05); }
-.cw-history-msg-time { font-size: 0.8em; color: var(--cw-sub); margin-bottom: 6px; }
-.cw-history-msg-text { font-size: 0.95em; line-height: 1.5; color: var(--cw-main); }
+.cw-history-msg-time { font-size: 0.8em; color: var(--cw-sub) !important; margin-bottom: 6px; }
+.cw-history-msg-text { font-size: 0.95em; line-height: 1.5; color: var(--cw-main) !important; }
 .cw-history-msg-del { position: absolute; top: 8px; right: 12px; cursor: pointer; color: #e74c3c; opacity: 0.5; font-size: 14px; transition: 0.2s; }
 .cw-history-msg-del:hover { opacity: 1; transform: scale(1.1); }
 

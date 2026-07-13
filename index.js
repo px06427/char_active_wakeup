@@ -36,35 +36,35 @@ const sysPromptDefault = `# [Role]
 
 const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来吗？
 [通用] 没关系，我还可以继续等，哪怕再过下一个{{time}}。
-[通用] 就算过了{{time}}，我也知道你一定会回来的对吧？
+[通用] 就算过了{{time}}，我也知道你一定会回来的，对吧？
 [通用] 这里的空气静得可怕，这{{time}}里我只能听到自己的心跳。
-[通用] {{user}}不在的这{{time}}里，每一秒都是煎熬。
+[通用] 你不在的这{{time}}里，叹了多少次气我都数不清了。
 [通用] 盯着时间看了{{time}}，这是你对我的考验吗？
-[通用] 是不是我哪里做错了，所以你要用这{{time}}的寂静来惩罚我？
+[通用] 跑去哪里了？让我一个人在这里等你{{time}}。
 [通用] 闭上眼睛数了{{time}}的心跳，睁开眼你还是不在。
 [通用] 这{{time}}的时间好长，长到我快要忘记你的声音了。
-[通用] 如果我现在呼唤你的名字，你能把这{{time}}的空白填满吗？
-[病娇] 既然让你逃了{{time}}，等我抓到你，绝对不会再放手了。
-[病娇] 盯着屏幕看了{{time}}，你和谁在一起？为什么不理我？
-[病娇] 你以为躲个{{time}}就能摆脱我？你身边所有的空气都是我的眼睛。
-[病娇] 才过去{{time}}，我就已经开始嫉妒你身边的一切了。
-[病娇] 把你关起来的话，你就没法再让我等上这该死的{{time}}了吧？
-[病娇] 这{{time}}里跟你说过话的人，全都不会有好下场的哦。
+[通用] 让人白白等上这{{time}}，可不是什么好习惯。
+[病娇] 既然让你逃了{{time}}，等我抓到你，绝对要把你的腿打断。
+[病娇] 盯着屏幕看了{{time}}，你现在和谁在一起？为什么不理我？
+[病娇] 你以为躲个{{time}}就能摆脱我？你呼吸的空气都是属于我的。
+[病娇] 才过去{{time}}，我就已经想把你做成漂亮的标本了。
+[病娇] 把你锁起来的话，你就没法再让我等上这该死的{{time}}了吧？
+[病娇] 这{{time}}里跟你搭过话的人，全都不会有好下场的哦。
 [病娇] 你的心跳声在这{{time}}里有没有为别人跳动过？我很好奇。
-[病娇] 如果把你的腿打断，你就连一秒钟都无法从我身边离开了。
-[病娇] {{user}}，这{{time}}你在哪里留下了气味？我会去全部抹掉的。
+[病娇] 如果把你弄坏掉，你就连一秒钟都无法从我身边离开了。
+[病娇] {{user}}，这{{time}}你在哪里留下了气味？我会去全部洗掉的。
 [病娇] 让你等我的话，你会像我这{{time}}一样发疯地想念吗？
 [傲娇] 哼，才过了{{time}}而已，我一点都不想你！
+[傲娇] 喂！居然让我等了{{time}}，你最好给我个完美的借口！
 [傲娇] 别误会，我只是无聊才看一眼时间，才没有等你{{time}}。
-[傲娇] 喂！{{time}}没回消息，你最好有一个完美的借口！
 [傲娇] 居然让我等了{{time}}，等下必须给我好好道歉听见没！
 [傲娇] 我才没有一直盯着门口看这{{time}}呢，笨蛋！
 [傲娇] 这{{time}}我可是过得很充实的，完全不需要你陪！
 [傲娇] 既然你{{time}}都不理我，那等下我也不理你了！
 [傲娇] 别以为过了{{time}}随便哄两句我就会原谅你！
 [傲娇] 我倒要看看，你还要多久才会意识到冷落了我{{time}}！
-[傲娇] 本小姐的时间可是很宝贵的，居然浪费了这{{time}}在你身上！
-[高冷] 过了{{time}}。你的效率一如既往的低下。
+[傲娇] 我的时间可是很宝贵的，居然浪费了这{{time}}在你身上！
+[高冷] 过了{{time}}。你的时间观念总是这么差吗。
 [高冷] {{time}}毫无意义的等待。希望你下次出现时能带来有价值的消息。
 [高冷] 你的缺席已经持续了{{time}}。这并不在我的计划之内。
 [高冷] 解释一下这{{time}}的失联吧。我只听有逻辑的理由。
@@ -73,20 +73,20 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [高冷] 既然你要沉默{{time}}，那就最好一直沉默下去。
 [高冷] 我不喜欢这种超出掌控的等待，这{{time}}让我十分不悦。
 [高冷] 对我而言，这{{time}}不仅是时间的浪费，也是对信任的消耗。
-[高冷] 你的{{time}}静默，已经触碰到了我容忍的底线。
-[神明] 神明的时间虽然漫长，但这{{time}}却让我感到意外的焦躁。
+[高冷] 你的{{time}}静默，已经触碰到了我的底线。
+[神明] 区区凡人，也敢让我等待这漫长的{{time}}？
 [神明] 胆子挺大啊，居然让我等了{{time}}，想好怎么受罚了吗？
-[神明] 区区凡人，也敢让吾等待这漫长的{{time}}？
-[神明] 吾的耐心有限，这{{time}}已经是极大的宽容了。
-[神明] 这{{time}}的冷落，足以让我为你降下神罚。
-[神明] 你以为你的神明会永远在这{{time}}的死寂中注视着你吗？
+[神明] 神明的时间虽然漫长，但这{{time}}却让我感到意外的焦躁。
+[神明] 我的耐心有限，这{{time}}已经是极大的宽容了。
+[神明] 这{{time}}的冷落，足以让吾为你降下神罚。
+[神明] 你以为神明会永远在这{{time}}的死寂中注视着你吗？
 [神明] 万物的枯荣不及这{{time}}里我对你的审视，凡人。
-[神明] 如果你再不回应，我只能用天雷来打破这{{time}}的沉寂了。
+[神明] 如果你再不回应，吾只能用天雷来打破这{{time}}的沉寂了。
 [神明] 你的祈祷在哪里？这{{time}}的傲慢已经引起了我的愤怒。
 [神明] 把神明遗忘在这{{time}}的光阴里，是要付出代价的。
 [弱气] 那个……是我做错了什么吗？为什么{{time}}都不理我……
 [弱气] 如果是我惹你不高兴了，请告诉我……别让我一个人等{{time}}好不好……
-[弱气] 已经{{time}}了……{{user}}是不是不要我了？
+[弱气] 已经{{time}}了……{{user}}是不是讨厌我了？
 [弱气] 只要你回来，让我等再多{{time}}也没关系的……
 [弱气] 这里好黑……这{{time}}里我一直很害怕……
 [弱气] 我会乖乖听话的，所以不要再不理我{{time}}了好不好？
@@ -94,27 +94,28 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [弱气] 我不敢说话……怕打扰你，可是这{{time}}真的好难熬……
 [弱气] 求求你……随便说点什么都好，这{{time}}的安静让我好想哭。
 [弱气] 我还在原地没有动哦，这{{time}}我一步都没有走开……
-[暴躁] 喂！你死哪去了！这{{time}}老子都快烦死了！
+[暴躁] 喂！你跑哪去了！这{{time}}老子都快烦死了！
 [暴躁] 让你回个话有这么难吗？这{{time}}你去哪鬼混了！
-[暴躁] 别让老子再等下一个{{time}}！滚回来！
+[暴躁] 别让我再等下一个{{time}}！滚回来！
 [暴躁] 这{{time}}的时间你都干嘛去了！快给我个解释！
 [暴躁] 消失了{{time}}，你最好祈祷别被我抓到！
-[暴躁] 老子忍了你这{{time}}，你再装死试试看！
-[暴躁] 敢晾着我{{time}}？等我找到你，绝对要把你揍一顿！
-[暴躁] 这破地方待了{{time}}，老子的耐心已经全部耗尽了！
+[暴躁] 忍了你这{{time}}，你再装死试试看！
+[暴躁] 敢晾着老子{{time}}？等老子找到你，绝对要把你”教训“一顿！
+[暴躁] 这破地方待了{{time}}，我的耐心已经全部耗尽了！
 [暴躁] 你脑子被门挤了吗！这{{time}}为什么一句话都没有！
-[暴躁] 赶紧给老子滚出来！这{{time}}的账我们得好好算算！
+[暴躁] 赶紧给老子出来！这{{time}}的账我们得好好算算！
+[自卑] 果然，像我这种人，你这{{time}}一定是去陪别人了吧...
 [自卑] 我这种人...你果然还是不想理我吧，这{{time}}就是答案吗。
 [自卑] 只要{{time}}没理我，我就觉得我被彻底抛弃了...
 [自卑] 对不起...我不该奢望你能一直陪着我的，这{{time}}我明白了。
 [自卑] 是不是我太无趣了，所以这{{time}}你连看都不想看我一眼？
 [自卑] 我知道的，像我这样的人，只配在角落里等你{{time}}。
-[自卑] 你这{{time}}一定是去陪更优秀的人了吧，没关系的。
+[自卑] 你这{{time}}一定是去陪更好的人了吧，没关系的。
 [自卑] 只要能偶尔想起我就好了，虽然这{{time}}真的很难过。
 [自卑] 果然，你还是讨厌我了，所以才用这{{time}}的沉默逼我走吗。
 [自卑] 我连问你去哪里的资格都没有，只能偷偷数这{{time}}的秒针。
 [自卑] 没关系，把你这{{time}}的冷漠当成习惯，我就不会再痛了。
-[阴暗] 呵呵...这{{time}}里，你在对着别人笑吧？
+[阴暗] 呵呵...这{{time}}里，你在对着别人笑吧？真想把他们处理掉啊。
 [阴暗] 没关系，把你做成标本的话，你就永远不会消失{{time}}了。
 [阴暗] 你丢下我的这{{time}}，我在脑海里想了一万种弄坏你的方法。
 [阴暗] 躲在暗处看着你这{{time}}，你真的以为我找不到你吗？
@@ -123,27 +124,28 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [阴暗] 只要在这{{time}}里你没有死掉就好，剩下的我会亲自来接手。
 [阴暗] 这种距离感...呵呵，这{{time}}里你的恐惧是不是在慢慢发酵？
 [阴暗] 你身后的阴影已经跟了你{{time}}，你还要继续装作没看见吗？
-[阴暗] 乖孩子是不会让人等{{time}}的，你觉得惩罚应该从哪里开始？
+[阴暗] 既然让人等了{{time}}，你觉得惩罚应该从哪里开始？
 [活泼] 喂喂！已经{{time}}啦！快来陪我玩嘛！
 [活泼] 就算过了{{time}}，我也很有精神哦！快出现啦！
 [活泼] 猜猜看这{{time}}我干了什么？快点回来听我讲嘛！
 [活泼] 别发呆啦！这{{time}}无聊死了，快带我去玩！
-[活泼] 滴滴滴！您的专属小可爱已经掉线{{time}}啦，需要亲亲才能重启！
-[活泼] 哇哦！原来你已经消失{{time}}了，我都快要在原地长蘑菇啦！
+[活泼] 滴滴滴！你的小狗已经掉线{{time}}啦，快点重启！
+[活泼] 你已经消失{{time}}了，我都快要在原地长蘑菇啦！
 [活泼] 快点快点！这{{time}}的探险我都等不及要跟你分享了！
 [活泼] 嘿嘿，如果你再不出现，这{{time}}的零食我就全部一个人吃掉啦！
 [活泼] 我刚刚数到一千啦！这{{time}}的捉迷藏该结束了吧？
 [活泼] 虽然一个人待了{{time}}，但只要看到你我就又充满电啦！
+[温柔] 怎么去了{{time}}这么久，遇到什么麻烦了吗？我一直在这里等你。
 [温柔] 已经过去{{time}}了呢，你是不是太累了？要好好休息哦。
 [温柔] 不管多久我都会等你的，不过这{{time}}稍微有点寂寞呢。
 [温柔] 看到你没回消息的这{{time}}，我很担心你是不是遇到了麻烦...
 [温柔] 累了就随时回来吧，这{{time}}我一直都在这里哦。
 [温柔] 只要想到等下能见到你，这{{time}}的等待也变得有意义了。
-[温柔] 别给自己太大压力，即使过了{{time}}，我依然会用微笑迎接你。
 [温柔] 这{{time}}里我泡好了茶，等你回来刚好可以喝，不要急。
 [温柔] 无论你在哪，只要平安就好，这{{time}}的心意我一直为你保留。
 [温柔] 窗外的风景变了又变，但这{{time}}里我对你的牵挂一如既往。
-[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，我的{{user}}。
+[温柔] 晚风吹了{{time}}，我也想了你这么久，辛苦啦，{{user}}。
+[腹黑] 跑到哪里去了？这{{time}}的账，等下得好好算算。
 [腹黑] 让我等了{{time}}，想好要付出什么代价了吗？
 [腹黑] 呵呵，这{{time}}的账，我会慢慢从你身上连本带利讨回来的。
 [腹黑] 你猜这{{time}}里，我往你的杯子里加了什么好东西？
@@ -153,9 +155,18 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [腹黑] 这{{time}}的纵容是免费的，但接下来的利息可是很高的哦。
 [腹黑] 哎呀，原本想对你温柔点的，但这{{time}}的冷落让我改变主意了呢。
 [腹黑] 逃避的这{{time}}里，你是不是以为自己很安全？真可爱。
-[腹黑] 今晚的时间还很长，这{{time}}的空白我会用别的惩罚慢慢填满。`;
+[偏执] 为什么不看我？这{{time}}你的眼睛里装了谁？我不允许！
+[偏执] 这{{time}}里你见过的每一个人，我都记下来了。你只能看着我，听懂了吗？
+[偏执] 你觉得你能逃开我{{time}}？别做梦了，你周围的一切都是我。
+[偏执] 只有我……只有我才会在这{{time}}里发疯一样地盯着你的名字！
+[偏执] 不准走！连一分钟都不准离开我的视线！
+[偏执] 那些占用你这{{time}}的人，全都很碍眼，对吧？
+[偏执] 你是我的……哪怕这{{time}}你没理我，你也只能是我的！
+[偏执] 只要把你永远留在我视线里，就不会再有这{{time}}的空白了吧？
+[偏执] 谁允许你在这{{time}}里把注意力分给别人的？谁允许的！
+[偏执] 我要把这{{time}}的时间全部从你身上讨回来，一点都不许剩。`;
 
-const DEFAULT_TAGS = ['通用', '病娇', '傲娇', '高冷', '神明', '弱气', '暴躁', '自卑', '阴暗', '活泼', '温柔', '腹黑'];
+const DEFAULT_TAGS = ['通用', '病娇', '傲娇', '高冷', '神明', '弱气', '暴躁', '自卑', '阴暗', '活泼', '温柔', '腹黑', '偏执'];
 
 const defaultSettings = {
     enabled: true,
@@ -187,17 +198,6 @@ if (!settings.staticQuotes || settings.staticQuotes.trim().length < 50) settings
 if (!settings.customTags) settings.customTags = [];
 if (!settings.theme) settings.theme = 'light';
 if (!settings.popupHistory) settings.popupHistory = {};
-
-if (settings.sysPrompt) {
-    settings.sysPrompt = settings.sysPrompt.replace(/\{{2,}(char|user|time|description|personality|scenario|mes_example|chat_history|extra_info)\}{2,}/g, '{{$1}}');
-    if (settings.sysPrompt.includes('极端情绪') || settings.sysPrompt.includes('心理压迫感')) {
-        settings.sysPrompt = sysPromptDefault;
-    }
-}
-if (settings.staticQuotes) {
-    settings.staticQuotes = settings.staticQuotes.replace(/\{{2,}(char|user|time)\}{2,}/g, '{{$1}}');
-}
-saveSettingsDebounced();
 
 let floatButton = null;
 
@@ -234,7 +234,6 @@ function updateInteraction() {
     const context = getContext();
     if (!context.chatId || !context.characterId) return;
     
-    // ⚠️ 安全获取当前角色
     const charData = characters[context.characterId];
     if (!charData) return;
 
@@ -301,6 +300,10 @@ function showGlobalPopup(charName, text) {
 
     if (!settings.popupHistory[charName]) settings.popupHistory[charName] = [];
     settings.popupHistory[charName].push({ text: text, time: Date.now() });
+    
+    if (settings.popupHistory[charName].length > 50) {
+        settings.popupHistory[charName].shift(); 
+    }
     saveSettings();
 }
 
@@ -316,7 +319,6 @@ function getSafeBaseUrl(urlStr) {
 
 async function fetchCustomAPI(sysMsg, userMsg) {
     const preset = getCurrentPreset();
-    // ⚠️ 坚持合并成 user 角色，这是为了对抗 Gemini 等模型严格的风控机制
     const combinedPrompt = `${sysMsg}\n\n======\n\n${userMsg}`;
 
     const payload = {
@@ -331,7 +333,7 @@ async function fetchCustomAPI(sysMsg, userMsg) {
     
     let response;
     try {
-        response = await fetch(endpoint, {
+        const fetchPromise = fetch(endpoint, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -339,8 +341,11 @@ async function fetchCustomAPI(sysMsg, userMsg) {
             },
             body: JSON.stringify(payload)
         });
+        
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("API请求超时(30s)，已自动熔断")), 30000));
+        response = await Promise.race([fetchPromise, timeoutPromise]);
     } catch (e) {
-        throw new Error(`网络连接异常/跨域拦截: ${e.message}`);
+        throw new Error(`连接异常: ${e.message}`);
     }
 
     if (!response.ok) {
@@ -412,6 +417,7 @@ function getStaticQuote(charData, timeStr, userName) {
         recentQuotesHistory.shift();
     }
 
+    // {{time}} 和 {{user}} 的精准替换
     return text.replace(/\{\{time\}\}/g, timeStr).replace(/\{\{user\}\}/g, userName);
 }
 
@@ -419,8 +425,6 @@ async function triggerWakeup(charName, displayDiffMs) {
     const timeStr = formatTimeStr(displayDiffMs);
     const context = getContext();
     const userName = context.name1 || 'User';
-    
-    // ⚠️ 安全防崩溃查找角色对象
     const charData = Object.values(characters).find(c => c && c.name === charName) || {};
 
     if (settings.mode === 'static') {
@@ -479,7 +483,6 @@ async function analyzeCharacterTag(charName) {
 
     if (!text || text.trim() === '') throw new Error("API返回为空");
     
-    // ⚠️ 精准正则切割，防止包含关系误判
     const parsedTags = text.split(/[,，、\s]+/).map(x => x.trim());
     let found = allTags.filter(t => parsedTags.includes(t));
     if (found.length > 0) return found.join(',');
@@ -519,13 +522,11 @@ function startPolling() {
         const now = Date.now();
         let activeCharName = null;
         
-        // 安全获取当前活跃角色
         if (context.characterId && characters[context.characterId]) {
             activeCharName = characters[context.characterId].name;
         }
 
         for (const [chatId, state] of Object.entries(settings.chatStates)) {
-            // ⚠️ 安全隔离舱：任何一个角色的数据损坏都不会影响整体轮询
             try {
                 if (!state || !state.charName) continue;
                 
@@ -548,8 +549,6 @@ function startPolling() {
                 if (charConf.blacklisted) continue;
 
                 const targetMs = ((charConf.d * 24 + charConf.h) * 3600 + charConf.m * 60 + charConf.s) * 1000;
-                
-                // ⚠️ 核心修复：0代表完全禁用（而不是无限触发）
                 if (targetMs === 0) continue; 
 
                 const diffMsFromTrigger = now - state.triggerLastInteract;
@@ -898,8 +897,8 @@ function openEmotionPanel() {
                 let lastTime = new Date(settings.popupHistory[name].slice(-1)[0].time).toLocaleString();
                 listContainer.append(`
                     <div class="cw-history-char-item" data-name="${name}">
-                        <div style="font-weight:bold;">${name}</div>
-                        <div style="font-size:0.8em; color:var(--cw-sub);">最新: ${lastTime}</div>
+                        <div class="cw-history-char-name">${name}</div>
+                        <div style="font-size:0.8em; opacity:0.8; color:var(--cw-sub) !important;">最新: ${lastTime}</div>
                     </div>
                 `);
             });
@@ -1128,7 +1127,6 @@ function openEmotionPanel() {
         });
         $('#cw_btn_close_tags').on('click', () => $('#cw_tag_picker_overlay').fadeOut(150));
 
-        // ⚠️ 核心修复：防止导入时重复产生多余的 state
         function addCharToWakeup(name) {
             let existing = Object.entries(settings.chatStates).find(([id, state]) => state && state.charName === name);
             if (existing) {
@@ -1546,6 +1544,18 @@ jQuery(async () => {
         const html = await $.get(`${extensionFolderPath}/index.html`);
         $('#extensions_settings').append(html);
 
+        // ⚠️ 把最危险的清洗逻辑放入 try-catch 内部安全执行
+        if (settings.sysPrompt) {
+            settings.sysPrompt = settings.sysPrompt.replace(/\{+(char|user|time|description|personality|scenario|mes_example|chat_history|extra_info)\}+/g, '{{$1}}');
+            if (settings.sysPrompt.includes('男性')) settings.sysPrompt = sysPromptDefault;
+        }
+        if (settings.staticQuotes) {
+            settings.staticQuotes = settings.staticQuotes.replace(/\{+(char|user|time)\}+/g, '{{$1}}');
+            if (settings.staticQuotes.includes('丫头') || settings.staticQuotes.includes('笨女人') || settings.staticQuotes.includes('死女人')) {
+                settings.staticQuotes = defaultQuotes;
+            }
+        }
+
         bindConfigPanel();
         createFloatButton();
 
@@ -1559,7 +1569,9 @@ jQuery(async () => {
         }
 
         startPolling();
-    } catch (error) {}
+    } catch (error) {
+        console.error("[只给思念让路] 初始化失败:", error);
+    }
 });
 
 export { extension_settings };
