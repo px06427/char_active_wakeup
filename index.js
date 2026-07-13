@@ -417,7 +417,6 @@ function getStaticQuote(charData, timeStr, userName) {
         recentQuotesHistory.shift();
     }
 
-    // {{time}} 和 {{user}} 的精准替换
     return text.replace(/\{\{time\}\}/g, timeStr).replace(/\{\{user\}\}/g, userName);
 }
 
@@ -1493,16 +1492,18 @@ function openEmotionPanel() {
     $('#cw_modal_prompt').val(settings.sysPrompt);
 
     const charList = getActiveCharConfigs();
+    
+    // ⚠️ 恢复了"📖设定"文字，并且HTML结构与新排版兼容
     let charHtml = charList.map(([name, conf]) => `
         <div class="cw-char-item" data-name="${name}">
             <div class="cw-char-name" title="${name}">${name}</div>
             <input type="text" class="cw-tag-input" readonly placeholder="点击选标签" value="${conf.tag || ''}" title="点击多选标签">
             <button class="cw-btn-extra-info" title="编辑专属设定/世界书">📖设定</button>
             <div class="cw-char-settings">
-                <input class="cw-time-input cw-d" type="number" min="0" value="${conf.d}" title="天">日
-                <input class="cw-time-input cw-h" type="number" min="0" max="23" value="${conf.h}" title="时">时
-                <input class="cw-time-input cw-m" type="number" min="0" max="59" value="${conf.m}" title="分">分
-                <input class="cw-time-input cw-s" type="number" min="0" max="59" value="${conf.s}" title="秒">秒
+                <input class="cw-time-input cw-d" type="number" min="0" value="${conf.d}">日
+                <input class="cw-time-input cw-h" type="number" min="0" max="23" value="${conf.h}">时
+                <input class="cw-time-input cw-m" type="number" min="0" max="59" value="${conf.m}">分
+                <input class="cw-time-input cw-s" type="number" min="0" max="59" value="${conf.s}">秒
                 <button class="cw-btn-toggle ${conf.blacklisted ? 'blacklisted' : ''}">${conf.blacklisted ? '屏蔽' : '正常'}</button>
             </div>
         </div>
@@ -1544,16 +1545,11 @@ jQuery(async () => {
         const html = await $.get(`${extensionFolderPath}/index.html`);
         $('#extensions_settings').append(html);
 
-        // ⚠️ 把最危险的清洗逻辑放入 try-catch 内部安全执行
         if (settings.sysPrompt) {
             settings.sysPrompt = settings.sysPrompt.replace(/\{+(char|user|time|description|personality|scenario|mes_example|chat_history|extra_info)\}+/g, '{{$1}}');
-            if (settings.sysPrompt.includes('男性')) settings.sysPrompt = sysPromptDefault;
         }
         if (settings.staticQuotes) {
             settings.staticQuotes = settings.staticQuotes.replace(/\{+(char|user|time)\}+/g, '{{$1}}');
-            if (settings.staticQuotes.includes('丫头') || settings.staticQuotes.includes('笨女人') || settings.staticQuotes.includes('死女人')) {
-                settings.staticQuotes = defaultQuotes;
-            }
         }
 
         bindConfigPanel();
