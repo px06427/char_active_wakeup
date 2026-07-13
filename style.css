@@ -32,7 +32,7 @@
 }
 
 .cw-config-panel {
-    width: 90%; max-width: 600px; max-height: 85vh; 
+    width: 90%; max-width: 650px; max-height: 85vh; 
     background-color: var(--cw-bg); border-radius: 20px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.04); padding: 30px;
     font-family: "Palatino Linotype", "Book Antiqua", "SimSun", "Songti SC", serif;
@@ -71,25 +71,50 @@
 .cw-tool-btn:hover { background: rgba(128,128,128,0.2); }
 .cw-tool-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ⚠️ 核心修复：完美自适应排版。一行放不下时智能拆分成两排，不拆分内部小元素 */
+/* ⚠️ 核心修复：列表项强行锁死单行（nowrap），不再乱挤！ */
 .cw-char-item {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: space-between;
-    padding: 12px 8px; border-bottom: 1px dashed rgba(128, 128, 128, 0.3);
+    display: flex; flex-wrap: nowrap; align-items: center; gap: 8px; justify-content: flex-start;
+    padding: 10px 5px; border-bottom: 1px dashed rgba(128, 128, 128, 0.3);
 }
 
-.cw-char-name { font-weight: bold; font-size: 1.05em; color: var(--cw-main); flex: 0 0 auto; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 4px; }
-.cw-tag-input { flex: 1 1 60px; min-width: 70px; padding: 4px 6px; border: 1px solid var(--cw-border); border-radius: 4px; background: rgba(255,255,255,0.05); color: var(--cw-main); font-size: 0.85em; cursor: pointer; text-align: center; }
+/* 名字锁死最大宽度，超长显示省略号 */
+.cw-char-name { 
+    flex: 0 0 100px; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; 
+    font-weight: bold; font-size: 1.05em; color: var(--cw-main); margin-right: 4px;
+}
 
-.cw-btn-extra-info { cursor: pointer; padding: 4px 6px; text-align: center; border-radius: 4px; font-size: 0.8em; border: 1px solid #f39c12; transition: 0.2s; background: transparent; color: #f39c12; flex: 0 0 auto; white-space: nowrap; }
+/* 标签框占据剩余的弹性空间 */
+.cw-tag-input { 
+    flex: 1 1 60px; min-width: 60px; padding: 4px 6px; border: 1px solid var(--cw-border); 
+    border-radius: 4px; background: rgba(255,255,255,0.05); color: var(--cw-main); 
+    font-size: 0.85em; cursor: pointer; text-align: center; 
+}
+
+/* 设定按钮保持固定大小 */
+.cw-btn-extra-info { 
+    flex: 0 0 auto; cursor: pointer; padding: 4px 6px; text-align: center; border-radius: 4px; 
+    font-size: 0.8em; border: 1px solid #f39c12; transition: 0.2s; background: transparent; 
+    color: #f39c12; white-space: nowrap; 
+}
 .cw-btn-extra-info:hover { background: #f39c12; color: #fff; }
 
-.cw-char-settings { display: flex; align-items: center; gap: 4px; flex: 1 1 auto; justify-content: flex-end; flex-wrap: nowrap; white-space: nowrap; font-size: 0.9em; color: var(--cw-sub); }
-.cw-time-input { width: 34px; text-align: center; border: 1px solid var(--cw-border); border-radius: 4px; background: transparent; color: var(--cw-main); padding: 2px 0; font-size: 0.95em; margin: 0 2px;}
+/* 右侧的时间组件整体打个包，绝对不允许换行 */
+.cw-char-settings { 
+    flex: 0 0 auto; display: flex; align-items: center; gap: 4px; flex-wrap: nowrap; 
+    white-space: nowrap; font-size: 0.9em; color: var(--cw-sub); margin-left: auto;
+}
 
+/* 时间输入框瘦身，更紧凑 */
+.cw-time-input { 
+    width: 28px; text-align: center; border: 1px solid var(--cw-border); border-radius: 4px; 
+    background: transparent; color: var(--cw-main); padding: 2px 0; font-size: 0.95em; 
+}
+
+/* 开关按钮固定大小 */
 .cw-btn-toggle {
-    cursor: pointer; padding: 4px 0; width: 44px; text-align: center;
+    flex: 0 0 auto; cursor: pointer; padding: 4px 0; width: 40px; text-align: center;
     border-radius: 4px; font-size: 0.8em; border: 1px solid var(--cw-border);
-    transition: 0.2s; background: transparent; color: var(--cw-main); flex: 0 0 auto; margin-left: 4px;
+    transition: 0.2s; background: transparent; color: var(--cw-main); margin-left: 6px;
 }
 .cw-btn-toggle.blacklisted { background: #e74c3c; color: #fff; border-color: #e74c3c; }
 
@@ -159,11 +184,17 @@
 }
 @keyframes cw-toast-fadein { from { opacity: 0; transform: translate(-50%, 20px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
-@media (max-width: 600px) {
+/* 屏幕较窄时（如手机或面板被压缩），自动切换为优雅的两行模式 */
+@media (max-width: 650px) {
     .cw-config-panel { padding: 20px 15px; max-height: 90vh; }
     .cw-prompt-modal { width: 95%; height: 85vh; padding: 15px; }
     .cw-api-preset-row select { width: 100%; flex: 1 1 100%; margin-bottom: 5px; }
-    /* ⚠️ 彻底移除了导致手机端强制垂直排版的导致错误代码，完全释放 Flexbox */
+    .cw-form-group > div[style*="display:flex"] { flex-direction: column; align-items: stretch !important; gap: 5px; }
+    .cw-form-group > div[style*="display:flex"] i { align-self: flex-end; }
+    
+    .cw-char-item { flex-wrap: wrap; }
+    .cw-char-settings { width: 100%; justify-content: flex-end; margin-top: 6px; }
+
     .cw-setting-btn { top: 15px; left: 15px; }
     .cw-theme-btn { top: 15px; left: 45px; }
     .cw-history-btn { top: 15px; left: 75px; }

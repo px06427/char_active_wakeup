@@ -492,16 +492,16 @@ async function analyzeCharacterTime(charName) {
     const charData = Object.values(characters).find(c => c && c.name === charName) || {};
     const extraInfo = settings.charConfigs[charName]?.extraInfo || '无';
     const sysMsg = "You are an AI character profiler. Output ONLY four comma-separated numbers representing Days,Hours,Minutes,Seconds limit. Example: 2,0,0,0";
-    const userMsg = `分析角色性格，判断ta被完全忽视时能忍耐多久才会主动发消息（忍耐阈值）。\n角色名：${charName}\n性格：${charData.personality || '无'}\n设定：${charData.description || '无'}\n附加设定：${extraInfo}\n\n请直接输出 天,时,分,秒（例如病娇忍耐极低可能输出0,1,0,0，高冷可能输出7,0,0,0）。只输出纯数字加逗号格式，绝对不要其他内容！`;
+    const userMsg = `分析角色性格，判断ta被完全忽视时能忍耐多久才会主动发消息（忍耐阈值）。\n角色名：${charName}\n性格：${charData.personality || '无'}\n设定：${charData.description || '无'}\n附加设定：${extraInfo}\n\n请直接输出 天,时,分,秒（例如病娇忍耐极低可能输出0,1,0,0，高冷可能输出7,0,0,0）。只输出纯数字格式，绝对不要其他内容！`;
 
     try {
         let text = await fetchCustomAPI(sysMsg, userMsg);
         if (!text || text.trim() === '') throw new Error("API返回为空");
-        const match = text.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
-        if (match) {
+        const nums = text.match(/\d+/g);
+        if (nums && nums.length >= 4) {
             return {
-                d: parseInt(match[1]) || 0, h: parseInt(match[2]) || 0,
-                m: parseInt(match[3]) || 0, s: parseInt(match[4]) || 0,
+                d: parseInt(nums[0]) || 0, h: parseInt(nums[1]) || 0,
+                m: parseInt(nums[2]) || 0, s: parseInt(nums[3]) || 0,
                 isFallback: false
             };
         }
@@ -588,6 +588,7 @@ function createFloatButton() {
     let isDragging = false;
     let dragThreshold = 5;
     let startX, startY, initialLeft, initialTop;
+    let rafId = null; // 动画帧渲染ID锁
 
     function onDragStart(e) {
         if (e.type === 'mousedown' && e.button !== 0) return;
@@ -614,13 +615,19 @@ function createFloatButton() {
         
         if (Math.abs(dx) > dragThreshold || Math.abs(dy) > dragThreshold) {
             isDragging = true;
-            if (e.type === 'touchmove') e.preventDefault();
+            if (e.type === 'touchmove') e.preventDefault(); // 阻止手机端拖拽时页面滑动
         }
         
-        let newLeft = Math.max(0, Math.min(initialLeft + dx, window.innerWidth - btn.offsetWidth));
-        let newTop = Math.max(0, Math.min(initialTop + dy, window.innerHeight - btn.offsetHeight));
-        
-        btn.style.left = newLeft + 'px'; btn.style.top = newTop + 'px';
+        // ⚠️ 动画帧渲染：将高频计算丢给 GPU，保证 120Hz 丝滑且不卡死浏览器
+        if (!rafId) {
+            rafId = requestAnimationFrame(() => {
+                let newLeft = Math.max(0, Math.min(initialLeft + dx, window.innerWidth - btn.offsetWidth));
+                let newTop = Math.max(0, Math.min(initialTop + dy, window.innerHeight - btn.offsetHeight));
+                btn.style.left = newLeft + 'px'; 
+                btn.style.top = newTop + 'px';
+                rafId = null;
+            });
+        }
     }
 
     function onDragEnd() {
@@ -629,6 +636,9 @@ function createFloatButton() {
         document.removeEventListener('touchmove', onDragMove);
         document.removeEventListener('touchend', onDragEnd);
         
+        // 释放动画帧渲染锁
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+
         btn.style.transition = 'transform 0.2s, box-shadow 0.2s, background 0.3s, color 0.3s';
         if (isDragging) {
             settings.floatPos = { x: parseInt(btn.style.left), y: parseInt(btn.style.top) };
@@ -1493,7 +1503,6 @@ function openEmotionPanel() {
 
     const charList = getActiveCharConfigs();
     
-    // ⚠️ 恢复了"📖设定"文字，并且HTML结构与新排版兼容
     let charHtml = charList.map(([name, conf]) => `
         <div class="cw-char-item" data-name="${name}">
             <div class="cw-char-name" title="${name}">${name}</div>
