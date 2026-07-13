@@ -100,7 +100,7 @@ const defaultQuotes = `[通用] 已经过去{{time}}了，你……还会回来�
 [暴躁] 这{{time}}的时间你都干嘛去了！快给我个解释！
 [暴躁] 消失了{{time}}，你最好祈祷别被我抓到！
 [暴躁] 忍了你这{{time}}，你再装死试试看！
-[暴躁] 敢晾着老子{{time}}？等老子找到你，绝对要把你”教训“一顿！
+[暴躁] 敢晾着老子{{time}}？等老子找到你，绝对要把你教训一顿！
 [暴躁] 这破地方待了{{time}}，我的耐心已经全部耗尽了！
 [暴躁] 你脑子被门挤了吗！这{{time}}为什么一句话都没有！
 [暴躁] 赶紧给老子出来！这{{time}}的账我们得好好算算！
@@ -565,7 +565,6 @@ function startPolling() {
     }, 2000);
 }
 
-// ⚠️ 彻底重构的自适应悬浮球逻辑（百分比+丝滑拖拽）
 function createFloatButton() {
     if (floatButton) { floatButton.remove(); floatButton = null; }
     if (!settings.floatingUI || !settings.enabled) return;
@@ -576,23 +575,22 @@ function createFloatButton() {
     btn.title = '打开思念面板';
     btn.innerHTML = '<i class="fa-solid fa-envelope-open-text"></i>';
 
-    // 以屏幕百分比 (vw/vh) 定位，彻底解决手机端重置消失和旋转屏幕错位问题
     if (settings.floatPos && settings.floatPos.x !== undefined && settings.floatPos.y !== undefined) {
         btn.style.left = settings.floatPos.x + 'vw';
         btn.style.top = settings.floatPos.y + 'vh';
         btn.style.right = 'auto';
         btn.style.bottom = 'auto';
     } else {
-        btn.style.left = 'auto';
-        btn.style.top = 'auto';
-        btn.style.right = '20px';
-        btn.style.bottom = '100px';
+        btn.style.left = 'calc(50vw - 22px)';
+        btn.style.top = 'calc(50vh - 22px)';
+        btn.style.right = 'auto';
+        btn.style.bottom = 'auto';
     }
 
     let isDragging = false;
     let dragThreshold = 5;
     let startX, startY, initialLeft, initialTop;
-    let rafId = null;
+    let rafId = null; 
 
     function onDragStart(e) {
         if (e.type === 'mousedown' && e.button !== 0) return;
@@ -602,7 +600,6 @@ function createFloatButton() {
         startX = clientX; startY = clientY;
         const rect = btn.getBoundingClientRect();
         
-        // 拖拽时临时转为固定 px 确保丝滑跟手
         btn.style.right = 'auto'; btn.style.bottom = 'auto';
         btn.style.left = rect.left + 'px';
         btn.style.top = rect.top + 'px';
@@ -622,10 +619,9 @@ function createFloatButton() {
         
         if (Math.abs(dx) > dragThreshold || Math.abs(dy) > dragThreshold) {
             isDragging = true;
-            if (e.type === 'touchmove') e.preventDefault(); // 阻止手机滑动穿透
+            if (e.type === 'touchmove') e.preventDefault(); 
         }
         
-        // 动画帧防卡顿
         if (!rafId) {
             rafId = requestAnimationFrame(() => {
                 let newLeft = Math.max(0, Math.min(initialLeft + dx, window.innerWidth - btn.offsetWidth));
@@ -648,11 +644,9 @@ function createFloatButton() {
         btn.style.transition = 'transform 0.2s, box-shadow 0.2s, background 0.3s, color 0.3s';
         if (isDragging) {
             const rect = btn.getBoundingClientRect();
-            // 拖放结束，转换回相对屏幕的百分比 (vw/vh) 并保存
             let vw = (rect.left / window.innerWidth) * 100;
             let vh = (rect.top / window.innerHeight) * 100;
             
-            // 边界约束，确保一定在屏幕内
             vw = Math.max(0, Math.min(vw, 100 - (44 / window.innerWidth * 100)));
             vh = Math.max(0, Math.min(vh, 100 - (44 / window.innerHeight * 100)));
 
@@ -848,7 +842,6 @@ function openEmotionPanel() {
                 </div>
             </div>
 
-            <!-- ⚠️ 导入弹窗：将一键全部导入替换为一键全部勾选 -->
             <div id="cw_char_picker_overlay" class="cw-modal-overlay" style="display:none; z-index:999999;">
                 <div class="cw-config-panel" style="width:400px; padding:20px; color: var(--cw-main); max-height: 80vh; display: flex; flex-direction: column;">
                     <h3 style="margin-top:0; text-align:center;">导入角色</h3>
@@ -864,7 +857,6 @@ function openEmotionPanel() {
                 </div>
             </div>
 
-            <!-- ⚠️ 删除弹窗：将一键全部清空替换为一键全部勾选 -->
             <div id="cw_remove_char_picker_overlay" class="cw-modal-overlay" style="display:none; z-index:999999;">
                 <div class="cw-config-panel" style="width:400px; padding:20px; color: var(--cw-main); max-height: 80vh; display: flex; flex-direction: column;">
                     <h3 style="margin-top:0; text-align:center;">删除角色配置</h3>
@@ -1188,7 +1180,6 @@ function openEmotionPanel() {
             $('#cw_char_picker_overlay').fadeIn(150);
         });
 
-        // ⚠️ 一键全选/反选 (导入列表)
         $(document).on('click', '#cw_btn_import_select_all', function() {
             const boxes = $('.cw-import-chk:visible');
             if (boxes.length === 0) return;
@@ -1243,7 +1234,6 @@ function openEmotionPanel() {
             $('#cw_remove_char_picker_overlay').fadeIn(150);
         });
 
-        // ⚠️ 一键全选/反选 (删除列表)
         $(document).on('click', '#cw_btn_delete_select_all', function() {
             const boxes = $('.cw-delete-chk:visible');
             if (boxes.length === 0) return;
@@ -1544,8 +1534,8 @@ function bindConfigPanel() {
     $('#cw_btn_reset_float').on('click', function() {
         settings.floatPos = null;
         saveSettings();
-        createFloatButton(); // 百分比重构后，这里会自动回到安全区！
-        showToast("悬浮球位置已重置至右下角！");
+        createFloatButton();
+        showToast("悬浮球位置已重置至屏幕正中间！");
     });
 }
 
