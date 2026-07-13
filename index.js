@@ -565,6 +565,7 @@ function startPolling() {
     }, 2000);
 }
 
+// ⚠️ 彻底重构的自适应悬浮球逻辑（百分比+丝滑拖拽）
 function createFloatButton() {
     if (floatButton) { floatButton.remove(); floatButton = null; }
     if (!settings.floatingUI || !settings.enabled) return;
@@ -575,12 +576,15 @@ function createFloatButton() {
     btn.title = '打开思念面板';
     btn.innerHTML = '<i class="fa-solid fa-envelope-open-text"></i>';
 
-    if (settings.floatPos && settings.floatPos.x > 0 && settings.floatPos.y > 0) {
-        const maxX = window.innerWidth - 44;
-        const maxY = window.innerHeight - 44;
-        btn.style.left = Math.min(Math.max(0, settings.floatPos.x), maxX) + 'px';
-        btn.style.top = Math.min(Math.max(0, settings.floatPos.y), maxY) + 'px';
+    // 以屏幕百分比 (vw/vh) 定位，彻底解决手机端重置消失和旋转屏幕错位问题
+    if (settings.floatPos && settings.floatPos.x !== undefined && settings.floatPos.y !== undefined) {
+        btn.style.left = settings.floatPos.x + 'vw';
+        btn.style.top = settings.floatPos.y + 'vh';
+        btn.style.right = 'auto';
+        btn.style.bottom = 'auto';
     } else {
+        btn.style.left = 'auto';
+        btn.style.top = 'auto';
         btn.style.right = '20px';
         btn.style.bottom = '100px';
     }
@@ -588,7 +592,7 @@ function createFloatButton() {
     let isDragging = false;
     let dragThreshold = 5;
     let startX, startY, initialLeft, initialTop;
-    let rafId = null; // 动画帧渲染ID锁
+    let rafId = null;
 
     function onDragStart(e) {
         if (e.type === 'mousedown' && e.button !== 0) return;
@@ -597,8 +601,11 @@ function createFloatButton() {
         
         startX = clientX; startY = clientY;
         const rect = btn.getBoundingClientRect();
+        
+        // 拖拽时临时转为固定 px 确保丝滑跟手
         btn.style.right = 'auto'; btn.style.bottom = 'auto';
-        btn.style.left = rect.left + 'px'; btn.style.top = rect.top + 'px';
+        btn.style.left = rect.left + 'px';
+        btn.style.top = rect.top + 'px';
         initialLeft = rect.left; initialTop = rect.top;
         
         btn.style.transition = 'none';
@@ -615,10 +622,10 @@ function createFloatButton() {
         
         if (Math.abs(dx) > dragThreshold || Math.abs(dy) > dragThreshold) {
             isDragging = true;
-            if (e.type === 'touchmove') e.preventDefault(); // 阻止手机端拖拽时页面滑动
+            if (e.type === 'touchmove') e.preventDefault(); // 阻止手机滑动穿透
         }
         
-        // ⚠️ 动画帧渲染：将高频计算丢给 GPU，保证 120Hz 丝滑且不卡死浏览器
+        // 动画帧防卡顿
         if (!rafId) {
             rafId = requestAnimationFrame(() => {
                 let newLeft = Math.max(0, Math.min(initialLeft + dx, window.innerWidth - btn.offsetWidth));
@@ -636,12 +643,25 @@ function createFloatButton() {
         document.removeEventListener('touchmove', onDragMove);
         document.removeEventListener('touchend', onDragEnd);
         
-        // 释放动画帧渲染锁
         if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
 
         btn.style.transition = 'transform 0.2s, box-shadow 0.2s, background 0.3s, color 0.3s';
         if (isDragging) {
-            settings.floatPos = { x: parseInt(btn.style.left), y: parseInt(btn.style.top) };
+            const rect = btn.getBoundingClientRect();
+            // 拖放结束，转换回相对屏幕的百分比 (vw/vh) 并保存
+            let vw = (rect.left / window.innerWidth) * 100;
+            let vh = (rect.top / window.innerHeight) * 100;
+            
+            // 边界约束，确保一定在屏幕内
+            vw = Math.max(0, Math.min(vw, 100 - (44 / window.innerWidth * 100)));
+            vh = Math.max(0, Math.min(vh, 100 - (44 / window.innerHeight * 100)));
+
+            btn.style.left = vw + 'vw';
+            btn.style.top = vh + 'vh';
+            btn.style.right = 'auto';
+            btn.style.bottom = 'auto';
+
+            settings.floatPos = { x: vw, y: vh };
             saveSettings();
         }
         setTimeout(() => { isDragging = false; }, 50);
@@ -653,15 +673,6 @@ function createFloatButton() {
     btn.addEventListener('click', (e) => {
         if (isDragging) { e.preventDefault(); e.stopPropagation(); return; }
         openEmotionPanel();
-    });
-
-    window.addEventListener('resize', () => {
-        if (!floatButton) return;
-        const rect = floatButton.getBoundingClientRect();
-        if (rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
-            floatButton.style.left = Math.min(rect.left, window.innerWidth - 50) + 'px';
-            floatButton.style.top = Math.min(rect.top, window.innerHeight - 50) + 'px';
-        }
     });
 
     document.body.appendChild(btn);
@@ -837,12 +848,13 @@ function openEmotionPanel() {
                 </div>
             </div>
 
+            <!-- ⚠️ 导入弹窗：将一键全部导入替换为一键全部勾选 -->
             <div id="cw_char_picker_overlay" class="cw-modal-overlay" style="display:none; z-index:999999;">
                 <div class="cw-config-panel" style="width:400px; padding:20px; color: var(--cw-main); max-height: 80vh; display: flex; flex-direction: column;">
                     <h3 style="margin-top:0; text-align:center;">导入角色</h3>
                     <input type="text" id="cw_add_char_search" class="cw-search-input" placeholder="搜索角色名..." style="margin-bottom: 10px;">
                     <div style="display:flex; gap:10px; margin-bottom:10px;">
-                        <button id="cw_btn_import_all" class="cw-tool-btn" style="flex:1;">一键全部导入</button>
+                        <button id="cw_btn_import_select_all" class="cw-tool-btn" style="flex:1;">一键全部勾选</button>
                         <button id="cw_btn_import_selected" class="cw-tool-btn" style="flex:1; background:var(--cw-main); color:var(--cw-bg);">导入已勾选</button>
                     </div>
                     <div id="cw_add_char_list" style="flex:1; overflow-y:auto; border:1px solid var(--cw-border); border-radius:6px; padding:5px;"></div>
@@ -852,11 +864,12 @@ function openEmotionPanel() {
                 </div>
             </div>
 
+            <!-- ⚠️ 删除弹窗：将一键全部清空替换为一键全部勾选 -->
             <div id="cw_remove_char_picker_overlay" class="cw-modal-overlay" style="display:none; z-index:999999;">
                 <div class="cw-config-panel" style="width:400px; padding:20px; color: var(--cw-main); max-height: 80vh; display: flex; flex-direction: column;">
                     <h3 style="margin-top:0; text-align:center;">删除角色配置</h3>
                     <div style="display:flex; gap:10px; margin-bottom:10px;">
-                        <button id="cw_btn_delete_all" class="cw-tool-btn" style="flex:1; color:#e74c3c;">一键全部清空</button>
+                        <button id="cw_btn_delete_select_all" class="cw-tool-btn" style="flex:1;">一键全部勾选</button>
                         <button id="cw_btn_delete_selected" class="cw-tool-btn" style="flex:1; background:#e74c3c; color:white;">删除已勾选</button>
                     </div>
                     <div id="cw_remove_char_list" style="flex:1; overflow-y:auto; border:1px solid var(--cw-border); border-radius:6px; padding:5px;"></div>
@@ -1175,6 +1188,14 @@ function openEmotionPanel() {
             $('#cw_char_picker_overlay').fadeIn(150);
         });
 
+        // ⚠️ 一键全选/反选 (导入列表)
+        $(document).on('click', '#cw_btn_import_select_all', function() {
+            const boxes = $('.cw-import-chk:visible');
+            if (boxes.length === 0) return;
+            const allChecked = boxes.length === boxes.filter(':checked').length;
+            boxes.prop('checked', !allChecked);
+        });
+
         $(document).on('click', '#cw_btn_import_selected', function() {
             let added = 0;
             $('.cw-import-chk:checked').each(function() {
@@ -1188,20 +1209,6 @@ function openEmotionPanel() {
                 openEmotionPanel();
             } else {
                 alert('请先勾选需要导入的角色');
-            }
-        });
-
-        $(document).on('click', '#cw_btn_import_all', function() {
-            let added = 0;
-            $('.cw-import-chk').each(function() {
-                addCharToWakeup($(this).val());
-                added++;
-            });
-            if(added > 0) {
-                saveSettings();
-                $('#cw_char_picker_overlay').fadeOut(150);
-                showToast(`一键导入了 ${added} 个角色！`);
-                openEmotionPanel();
             }
         });
 
@@ -1236,6 +1243,14 @@ function openEmotionPanel() {
             $('#cw_remove_char_picker_overlay').fadeIn(150);
         });
 
+        // ⚠️ 一键全选/反选 (删除列表)
+        $(document).on('click', '#cw_btn_delete_select_all', function() {
+            const boxes = $('.cw-delete-chk:visible');
+            if (boxes.length === 0) return;
+            const allChecked = boxes.length === boxes.filter(':checked').length;
+            boxes.prop('checked', !allChecked);
+        });
+
         $(document).on('click', '#cw_btn_delete_selected', function() {
             let removed = 0;
             $('.cw-delete-chk:checked').each(function() {
@@ -1254,16 +1269,6 @@ function openEmotionPanel() {
             } else {
                 alert('请先勾选需要删除的角色');
             }
-        });
-
-        $(document).on('click', '#cw_btn_delete_all', function() {
-            if(!confirm('危险操作：确定要清空【所有角色】的配置记录吗？\n(这将会清除它们的忍耐时间与独立标签)')) return;
-            settings.charConfigs = {};
-            settings.chatStates = {};
-            saveSettings();
-            $('#cw_remove_char_picker_overlay').fadeOut(150);
-            showToast('已清空所有角色记录！');
-            openEmotionPanel();
         });
 
         $('#cw_btn_close_remove_char').on('click', () => $('#cw_remove_char_picker_overlay').fadeOut(150));
@@ -1539,7 +1544,7 @@ function bindConfigPanel() {
     $('#cw_btn_reset_float').on('click', function() {
         settings.floatPos = null;
         saveSettings();
-        createFloatButton();
+        createFloatButton(); // 百分比重构后，这里会自动回到安全区！
         showToast("悬浮球位置已重置至右下角！");
     });
 }
